@@ -1,135 +1,73 @@
 model User {
-  id             Int                 @id @default(autoincrement())
-  username       String              @unique
-  email          String              @unique
-  accountName    String              @unique
-  profilePicture String?
-  subscribings   ChannelSubscriber[]
-  subscribeLevel ChannelLevel[]
-  ownedChannels  ChannelAdmin[]
-  comments       Comment[]
-  reactions      Reaction[]
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
+  id          Int          @id @default(autoincrement())
+  type        UserTypeEnum
+  username    String       @unique
+  email       String       @unique
+  phoneNumber String       @unique
+  firstName   String?
+  lastName    String?
+  reviews     Review[]
+  background  String?
+  score       Float?
+  requests    Request[]
+  schedules   Schedule[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
-model Channel {
-  id                Int                @id @default(autoincrement())
-  name              String             @unique
-  profilePicture    String?
-  about             String?
-  channelSubscriber ChannelSubscriber?
-  channelLevels     ChannelLevel[]
-  ownedBy           ChannelAdmin[]
-  videos            Video[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-}
-
-model ChannelAdmin {
-  id          Int           @id @default(autoincrement())
-  user        User          @relation(fields: [userId], references: [id])
-  userId      Int
-  roleName    AdminRoleEnum @default(ADMIN)
-  permissions Permission[]
-  channel     Channel       @relation(fields: [channelId], references: [id])
-  channelId   Int
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-}
-
-model ChannelSubscriber {
+model Review {
   id        Int      @id @default(autoincrement())
-  users     User[]
-  channel   Channel  @relation(fields: [channelId], references: [id])
-  channelId Int      @unique
+  review    String?
+  score     Float
+  doctor    User     @relation(fields: [doctorId], references: [id])
+  doctorId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model ChannelLevel {
-  id        Int       @id @default(autoincrement())
-  level     String
-  benefits  Benefit[]
-  users     User[]
-  channel   Channel   @relation(fields: [channelId], references: [id])
-  channelId Int
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@unique([level, channelId])
+model Request {
+  id             Int             @id @default(autoincrement())
+  description    String?
+  price          Float
+  meetingType    MeetingTypeEnum
+  location       String?
+  startTime      DateTime
+  finishTime     DateTime
+  patience       User            @relation(fields: [patienceId], references: [id])
+  patienceId     Int
+  doctorTimeslot DoctorTimeslot?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }
 
-model Benefit {
-  id            Int            @id @default(autoincrement())
-  benefit       BenefitEnum    @unique
-  channelLevels ChannelLevel[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+model Schedule {
+  id        Int              @id @default(autoincrement())
+  doctor    User             @relation(fields: [doctorId], references: [id])
+  doctorId  Int
+  info      String?
+  timeslots DoctorTimeslot[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }
 
-enum BenefitEnum {
-  EMOTICON
-  EARLY_ACCESS
-  COMMUNITY_VIDEO
+model DoctorTimeslot {
+  id         Int      @id @default(autoincrement())
+  request    Request? @relation(fields: [requestId], references: [id])
+  requestId  Int?     @unique
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+  scheduleId Int
+  startTime  DateTime
+  finishTIme DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
-enum AdminRoleEnum {
-  ADMIN
-  EDITOR
-  CREATOR
+enum MeetingTypeEnum {
+  ONLINE
+  OFFLINE
 }
 
-model Permission {
-  id           Int            @id @default(autoincrement())
-  ChannelAdmin ChannelAdmin[]
-  permission   PermissionEnum @unique
-}
-
-enum PermissionEnum {
-  CREATE
-  EDIT
-  POST
-  DELETE
-}
-
-model Video {
-  id          Int        @id @default(autoincrement())
-  name        String
-  description String?
-  channel     Channel    @relation(fields: [channelId], references: [id])
-  channelId   Int
-  comments    Comment[]
-  reactions   Reaction[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-}
-
-model Reaction {
-  id      Int          @id @default(autoincrement())
-  type    ReactionEnum
-  video   Video        @relation(fields: [videoId], references: [id])
-  videoId Int
-  user    User[]
-
-  @@unique([videoId, type])
-}
-
-enum ReactionEnum {
-  LIKE
-  DISLIKE
-}
-
-model Comment {
-  id          Int       @id @default(autoincrement())
-  comment     String?
-  user        User?     @relation(fields: [userId], references: [id])
-  userId      Int?
-  video       Video     @relation(fields: [videoId], references: [id])
-  videoId     Int
-  commentBy   Comment[] @relation("CommentRelation")
-  commentTo   Comment?  @relation("CommentRelation", fields: [commentToId], references: [id])
-  commentToId Int?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+enum UserTypeEnum {
+  USER
+  DOCTOR
 }
