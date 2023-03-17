@@ -1,18 +1,21 @@
 model User {
-  id          Int          @id @default(autoincrement())
-  type        UserTypeEnum
-  username    String       @unique
-  email       String       @unique
-  phoneNumber String       @unique
-  firstName   String?
-  lastName    String?
-  reviews     Review[]
-  background  String?
-  score       Float?
-  requests    Request[]
-  schedules   Schedule[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id                Int          @id @default(autoincrement())
+  type              UserTypeEnum
+  uuid              String       @unique
+  username          String       @unique
+  password          String
+  email             String       @unique
+  phoneNumber       String       @unique
+  firstName         String
+  lastName          String
+  licenseId         String?      @unique
+  reviews           Review[]
+  background        String?
+  requests          Request[]
+  schedules         Schedule[]
+  profilePictureUrl String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 }
 
 model Review {
@@ -27,7 +30,9 @@ model Review {
 
 model Request {
   id             Int             @id @default(autoincrement())
+  title          String
   description    String?
+  problemType    ProblemTypeEnum
   price          Float
   meetingType    MeetingTypeEnum
   location       String?
@@ -40,14 +45,19 @@ model Request {
   updatedAt      DateTime        @updatedAt
 }
 
+enum ProblemTypeEnum {
+  MENTAL_HEALTH
+  DEPRESSION
+}
+
 model Schedule {
-  id        Int              @id @default(autoincrement())
-  doctor    User             @relation(fields: [doctorId], references: [id])
-  doctorId  Int
-  info      String?
-  timeslots DoctorTimeslot[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id             Int              @id @default(autoincrement())
+  doctorUUID     User             @relation(fields: [uuid], references: [uuid])
+  uuid           String
+  specialistInfo String?
+  timeslots      DoctorTimeslot[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model DoctorTimeslot {
