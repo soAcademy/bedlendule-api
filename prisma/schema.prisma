@@ -55,6 +55,8 @@ model Schedule {
   doctorUUID     User             @relation(fields: [uuid], references: [uuid])
   uuid           String
   specialistInfo String?
+  meetingType    MeetingTypeEnum  @default(ONLINE)
+  location       String?
   timeslots      DoctorTimeslot[]
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
