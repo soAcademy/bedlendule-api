@@ -1,4 +1,4 @@
-import { UserTypeEnum } from "@prisma/client";
+import { MeetingTypeEnum, UserTypeEnum } from "@prisma/client";
 import * as t from "io-ts";
 import { optional, strict } from "io-ts-extra";
 
@@ -36,9 +36,14 @@ export interface IUpdateUser extends t.TypeOf<typeof updateUserCodec> {}
 export const getScheduleCodec = t.type({ uuid: t.string });
 export interface IGetSchedule extends t.TypeOf<typeof getScheduleCodec> {}
 
-export const createScheduleCodec = t.type({
+export const createScheduleCodec = strict({
   uuid: t.string,
   specialistInfo: t.string,
+  meetingType: t.keyof({
+    [MeetingTypeEnum.OFFLINE]: null,
+    [MeetingTypeEnum.ONLINE]: null,
+  }),
+  location: optional(t.string),
   timeslots: t.array(
     t.type({
       startTime: t.string,
@@ -54,3 +59,29 @@ export const getScheduleByDateCodec = t.type({
 });
 export interface IGetScheduleByDate
   extends t.TypeOf<typeof getScheduleByDateCodec> {}
+
+export const updateScheduleCodec = strict({
+  scheduleId: t.number,
+  addingTimeSlots: optional(
+    t.array(
+      t.type({
+        startTime: t.string,
+        finishTime: t.string,
+      })
+    )
+  ),
+  removingTimeSlots: optional(t.array(t.number)),
+  specialistInfo: optional(t.string),
+  meetingType: optional(
+    t.keyof({
+      [MeetingTypeEnum.OFFLINE]: null,
+      [MeetingTypeEnum.ONLINE]: null,
+    })
+  ),
+  location: optional(t.string),
+});
+
+export interface IUpdateSchedule extends t.TypeOf<typeof updateScheduleCodec> {}
+
+export const deleteScheduleCodec = t.type({ scheduleId: t.number });
+export interface IDeleteSchedule extends t.TypeOf<typeof deleteScheduleCodec> {}

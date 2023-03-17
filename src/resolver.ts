@@ -2,9 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import {
   ICreateSchedule,
   ICreateUser,
+  IDeleteSchedule,
   IGetSchedule,
   IGetScheduleByDate,
   IGetUserByUUID,
+  IUpdateSchedule,
   IUpdateUser,
 } from "./interface";
 export const prisma = new PrismaClient();
@@ -58,6 +60,8 @@ export const createSchedule = (args: ICreateSchedule) => {
     data: {
       uuid: args.uuid,
       specialistInfo: args.specialistInfo,
+      meetingType: args.meetingType,
+      location: args.location,
       timeslots: {
         create: args.timeslots.map((e) => {
           return {
@@ -80,6 +84,8 @@ export const getSchedule = (args: IGetSchedule) => {
         select: {
           id: true,
           specialistInfo: true,
+          meetingType: true,
+          location: true,
           timeslots: {
             select: {
               id: true,
@@ -156,6 +162,52 @@ export const getOpeningRequests = () => {
       doctorTimeslot: {
         is: null,
       },
+    },
+  });
+};
+
+export const updateSchedule = async (args: IUpdateSchedule) => {
+  return prisma.schedule.update({
+    where: {
+      id: args.scheduleId,
+    },
+    data: {
+      specialistInfo: args.specialistInfo || undefined,
+      meetingType: args.meetingType || undefined,
+      location: args.location || undefined,
+      timeslots: {
+        create: args.addingTimeSlots?.map((e) => {
+          return {
+            startTime: new Date(e.startTime),
+            finishTIme: new Date(e.finishTime),
+          };
+        }),
+        delete: args.removingTimeSlots?.map((e) => {
+          return {
+            id: e,
+          };
+        }),
+      },
+    },
+  });
+};
+
+export const deleteSchedule = async (args: IDeleteSchedule) => {
+  await prisma.schedule.update({
+    where: {
+      id: args.scheduleId,
+    },
+    data: {
+      timeslots: {
+        deleteMany: {
+          scheduleId: args.scheduleId,
+        },
+      },
+    },
+  });
+  return prisma.schedule.delete({
+    where: {
+      id: args.scheduleId,
     },
   });
 };
