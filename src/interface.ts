@@ -1,4 +1,4 @@
-import { MeetingTypeEnum, UserTypeEnum } from "@prisma/client";
+import { MeetingTypeEnum, ProblemTypeEnum, UserTypeEnum } from "@prisma/client";
 import * as t from "io-ts";
 import { optional, strict } from "io-ts-extra";
 
@@ -85,3 +85,72 @@ export interface IUpdateSchedule extends t.TypeOf<typeof updateScheduleCodec> {}
 
 export const deleteScheduleCodec = t.type({ scheduleId: t.number });
 export interface IDeleteSchedule extends t.TypeOf<typeof deleteScheduleCodec> {}
+
+export const getOpeningRequestsByDateCodec = t.type({
+  date: t.string,
+});
+
+export interface IGetOpeningRequestsByDate
+  extends t.TypeOf<typeof getOpeningRequestsByDateCodec> {}
+
+export const getRequestsByIdCodec = t.type({
+  requestId: t.number,
+});
+
+export interface IGetRequestsById
+  extends t.TypeOf<typeof getRequestsByIdCodec> {}
+
+export const acceptRequestCodec = t.type({
+  requestId: t.number,
+  uuid: t.string,
+  startTime: t.string,
+  finishTime: t.string,
+});
+export interface IAcceptRequest extends t.TypeOf<typeof acceptRequestCodec> {}
+
+export const getRequestByUUIDCodec = t.type({
+  uuid: t.string,
+});
+export interface IGetRequestByUUID
+  extends t.TypeOf<typeof getRequestByUUIDCodec> {}
+
+export const createRequestCodec = strict({
+  title: t.string,
+  description: optional(t.string),
+  problemType: t.keyof({
+    [ProblemTypeEnum.DEPRESSION]: null,
+    [ProblemTypeEnum.MENTAL_HEALTH]: null,
+  }),
+  price: t.number,
+  meetingType: t.keyof({
+    [MeetingTypeEnum.OFFLINE]: null,
+    [MeetingTypeEnum.ONLINE]: null,
+  }),
+  location: optional(t.string),
+  startTime: t.string,
+  finishTime: t.string,
+  patientUUID: t.string,
+});
+export interface ICreateRequest extends t.TypeOf<typeof createRequestCodec> {}
+
+export const getScheduleByUUIDCodec = t.type({
+  uuid: t.string,
+});
+
+export interface IGetSCheduleByUUID
+  extends t.TypeOf<typeof getScheduleByUUIDCodec> {}
+
+export const bookTimeSlotCodec = t.type({
+  price: t.number,
+  startTime: t.string,
+  finishTime: t.string,
+  patientUUID: t.string,
+  timeslotId: t.number,
+  meetingType: t.keyof({
+    [MeetingTypeEnum.OFFLINE]:null,
+    [MeetingTypeEnum.ONLINE]:null,
+  }),
+  location: t.string,
+});
+
+export interface IBookTimeSlot extends t.TypeOf<typeof bookTimeSlotCodec> {}

@@ -1,8 +1,15 @@
-import { PrismaClient } from "@prisma/client";
+import { MeetingTypeEnum, PrismaClient, ProblemTypeEnum } from "@prisma/client";
 import {
+  IAcceptRequest,
+  IBookTimeSlot,
+  ICreateRequest,
   ICreateSchedule,
   ICreateUser,
   IDeleteSchedule,
+  IGetOpeningRequestsByDate,
+  IGetRequestByUUID,
+  IGetRequestsById,
+  IGetSCheduleByUUID,
   IGetSchedule,
   IGetScheduleByDate,
   IGetUserByUUID,
@@ -23,7 +30,6 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
       uuid: args.uuid,
     },
     select: {
-      username: true,
       email: true,
       phoneNumber: true,
       firstName: true,
@@ -36,6 +42,8 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
           score: true,
         },
       },
+      background: true,
+      profilePictureUrl: true,
     },
   });
 };
@@ -121,8 +129,6 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
             some: {
               startTime: {
                 gte: new Date(args.date),
-              },
-              finishTIme: {
                 lte: new Date(new Date(args.date).getTime() + 86400000),
               },
             },
@@ -156,12 +162,13 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
   });
 };
 
-export const getOpeningRequests = () => {
-  return prisma.request.findMany({
+export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
+  return prisma.schedule.findMany({
     where: {
-      doctorTimeslot: {
-        is: null,
-      },
+      uuid: args.uuid,
+    },
+    include: {
+      timeslots: true,
     },
   });
 };
@@ -209,5 +216,146 @@ export const deleteSchedule = async (args: IDeleteSchedule) => {
     where: {
       id: args.scheduleId,
     },
+  });
+};
+
+export const getOpeningRequests = () => {
+  return prisma.request.findMany({
+    where: {
+      doctorTimeslot: {
+        is: null,
+      },
+    },
+    include: {
+      doctorTimeslot: true,
+    },
+  });
+};
+
+export const getOpeningRequestsByDate = (args: IGetOpeningRequestsByDate) => {
+  return prisma.request.findMany({
+    where: {
+      doctorTimeslot: {
+        is: null,
+      },
+      startTime: {
+        gte: new Date(args.date),
+        lte: new Date(new Date(args.date).getTime() + 86400000),
+      },
+    },
+  });
+};
+
+export const getRequestByRequestId = (args: IGetRequestsById) => {
+  return prisma.request.findFirstOrThrow({
+    where: {
+      id: args.requestId,
+    },
+    include: {
+      doctorTimeslot: true,
+    },
+  });
+};
+
+export const getRequestsByUUID = (args: IGetRequestByUUID) => {
+  return prisma.request.findMany({
+    where: {
+      patientUUID: args.uuid,
+    },
+  });
+};
+
+export const acceptRequest = async (args: IAcceptRequest) => {
+  const request = await getRequestByRequestId({ requestId: args.requestId });
+  if (request.doctorTimeslot === null) {
+    return prisma.doctorTimeslot.create({
+      data: {
+        request: {
+          connect: {
+            id: args.requestId,
+          },
+        },
+        schedule: {
+          create: {
+            doctorUUID: {
+              connect: {
+                uuid: args.uuid,
+              },
+            },
+            meetingType: request.meetingType,
+            location: request.location,
+          },
+        },
+        startTime: new Date(args.startTime),
+        finishTIme: new Date(args.finishTime),
+      },
+    });
+  } else {
+    throw new Error("Invalid request");
+  }
+};
+
+export const createRequest = (args: ICreateRequest) => {
+  return prisma.request.create({
+    data: {
+      title: args.title,
+      description: args.description,
+      problemType: args.problemType,
+      price: args.price,
+      meetingType: args.meetingType,
+      location: args.location,
+      startTime: new Date(args.startTime),
+      finishTime: new Date(args.finishTime),
+      patient: {
+        connect: {
+          uuid: args.patientUUID,
+        },
+      },
+    },
+  });
+};
+
+export const getDoctors = () => {
+  return prisma.user.findMany({
+    where: {
+      type: "DOCTOR",
+    },
+    select: {
+      uuid: true,
+      firstName: true,
+      lastName: true,
+      reviews: {
+        select: { score: true },
+      },
+      background: true,
+      profilePictureUrl: true,
+    },
+  });
+};
+
+export const bookTimeSlot = (args: IBookTimeSlot) => {
+  return prisma.request.create({
+    data: {
+      title: "BOOK TIMESLOT",
+      description: "Meeting with therapist",
+      price: args.price,
+      startTime: new Date(args.startTime),
+      finishTime: new Date(args.finishTime),
+      patient: {
+        connect: {
+          uuid: args.patientUUID,
+        },
+      },
+      doctorTimeslot: {
+        connect: {
+          id: args.timeslotId,
+        },
+      },
+      problemType: ProblemTypeEnum.OTHER,
+      meetingType: args.meetingType
+    },
+    include: {
+      doctorTimeslot: true,
+    }
   });
 };
