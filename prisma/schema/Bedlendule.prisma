@@ -38,8 +38,8 @@ model Request {
   location       String?
   startTime      DateTime
   finishTime     DateTime
-  patience       User            @relation(fields: [patienceId], references: [id])
-  patienceId     Int
+  patient        User            @relation(fields: [patientUUID], references: [uuid])
+  patientUUID    String
   doctorTimeslot DoctorTimeslot?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
@@ -48,6 +48,7 @@ model Request {
 enum ProblemTypeEnum {
   MENTAL_HEALTH
   DEPRESSION
+  OTHER
 }
 
 model Schedule {
