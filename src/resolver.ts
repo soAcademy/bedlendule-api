@@ -75,6 +75,7 @@ export const createSchedule = (args: ICreateSchedule) => {
           return {
             startTime: new Date(e.startTime),
             finishTIme: new Date(e.finishTime),
+            price: e.price,
           };
         }),
       },
@@ -341,6 +342,7 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
       },
       problemType: ProblemTypeEnum.OTHER,
       meetingType: args.meetingType,
+      location: args.location,
     },
     include: {
       doctorTimeslot: true,

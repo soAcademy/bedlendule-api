@@ -71,6 +71,7 @@ model DoctorTimeslot {
   scheduleId Int
   startTime  DateTime
   finishTIme DateTime
+  price      Float?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

@@ -49,6 +49,7 @@ export const createScheduleCodec = strict({
     t.type({
       startTime: t.string,
       finishTime: t.string,
+      price: t.number,
     })
   ),
 });
@@ -60,6 +61,13 @@ export const getScheduleByDateCodec = t.type({
 });
 export interface IGetScheduleByDate
   extends t.TypeOf<typeof getScheduleByDateCodec> {}
+
+export const getScheduleByUUIDCodec = t.type({
+  uuid: t.string,
+});
+
+export interface IGetSCheduleByUUID
+  extends t.TypeOf<typeof getScheduleByUUIDCodec> {}
 
 export const updateScheduleCodec = strict({
   scheduleId: t.number,
@@ -133,13 +141,6 @@ export const createRequestCodec = strict({
   patientUUID: t.string,
 });
 export interface ICreateRequest extends t.TypeOf<typeof createRequestCodec> {}
-
-export const getScheduleByUUIDCodec = t.type({
-  uuid: t.string,
-});
-
-export interface IGetSCheduleByUUID
-  extends t.TypeOf<typeof getScheduleByUUIDCodec> {}
 
 export const bookTimeSlotCodec = t.type({
   price: t.number,
