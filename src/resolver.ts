@@ -8,7 +8,7 @@ import {
   IDeleteSchedule,
   IGetOpeningRequestsByDate,
   IGetRequestByUUID,
-  IGetRequestsById,
+  IGetRequestByRequestId,
   IGetSCheduleByUUID,
   IGetSchedule,
   IGetScheduleByDate,
@@ -82,39 +82,27 @@ export const createSchedule = (args: ICreateSchedule) => {
   });
 };
 
-export const getSchedule = (args: IGetSchedule) => {
-  return prisma.user.findFirstOrThrow({
+export const getAllTimeSlots = () => {
+  return prisma.doctorTimeslot.findMany({
     where: {
-      uuid: args.uuid,
+      requestId: null,
     },
-    include: {
-      schedules: {
+    select: {
+      id: true,
+      request: {
         select: {
           id: true,
-          specialistInfo: true,
+          title: true,
+          description: true,
+          problemType: true,
           meetingType: true,
           location: true,
-          timeslots: {
-            select: {
-              id: true,
-              request: {
-                select: {
-                  id: true,
-                  title: true,
-                  description: true,
-                  problemType: true,
-                  meetingType: true,
-                  location: true,
-                  startTime: true,
-                  finishTime: true,
-                },
-              },
-              startTime: true,
-              finishTIme: true,
-            },
-          },
+          startTime: true,
+          finishTime: true,
         },
       },
+      startTime: true,
+      finishTIme: true,
     },
   });
 };
@@ -246,7 +234,7 @@ export const getOpeningRequestsByDate = (args: IGetOpeningRequestsByDate) => {
   });
 };
 
-export const getRequestByRequestId = (args: IGetRequestsById) => {
+export const getRequestByRequestId = (args: IGetRequestByRequestId) => {
   return prisma.request.findFirstOrThrow({
     where: {
       id: args.requestId,
@@ -352,10 +340,10 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
         },
       },
       problemType: ProblemTypeEnum.OTHER,
-      meetingType: args.meetingType
+      meetingType: args.meetingType,
     },
     include: {
       doctorTimeslot: true,
-    }
+    },
   });
 };

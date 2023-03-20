@@ -93,12 +93,12 @@ export const getOpeningRequestsByDateCodec = t.type({
 export interface IGetOpeningRequestsByDate
   extends t.TypeOf<typeof getOpeningRequestsByDateCodec> {}
 
-export const getRequestsByIdCodec = t.type({
+export const getRequestByRequestIdCodec = t.type({
   requestId: t.number,
 });
 
-export interface IGetRequestsById
-  extends t.TypeOf<typeof getRequestsByIdCodec> {}
+export interface IGetRequestByRequestId
+  extends t.TypeOf<typeof getRequestByRequestIdCodec> {}
 
 export const acceptRequestCodec = t.type({
   requestId: t.number,
@@ -108,11 +108,11 @@ export const acceptRequestCodec = t.type({
 });
 export interface IAcceptRequest extends t.TypeOf<typeof acceptRequestCodec> {}
 
-export const getRequestByUUIDCodec = t.type({
+export const getRequestsByUUIDCodec = t.type({
   uuid: t.string,
 });
 export interface IGetRequestByUUID
-  extends t.TypeOf<typeof getRequestByUUIDCodec> {}
+  extends t.TypeOf<typeof getRequestsByUUIDCodec> {}
 
 export const createRequestCodec = strict({
   title: t.string,

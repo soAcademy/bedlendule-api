@@ -11,7 +11,7 @@ import {
   getOpeningRequestsByDate,
   getRequestByRequestId,
   getRequestsByUUID,
-  getSchedule,
+  getAllTimeSlots,
   getScheduleByDate,
   getScheduleByUUID,
   getUserDetailByUUID,
@@ -81,10 +81,8 @@ describe("BEDLENDULE", () => {
     // console.log("createSchedule", result);
   });
 
-  test("getSchedule", async () => {
-    const result = await getSchedule({
-      uuid: "f641413d-3924-416b-a727-3286d75cfb56",
-    });
+  test("getAllTimeSlots", async () => {
+    const result = await getAllTimeSlots();
     // console.log("getSchedule", result);
   });
 
@@ -250,7 +248,7 @@ describe("bookTimeSlot", () => {
     };
     const result = await bookTimeSlot({ ...data, meetingType: "ONLINE" });
     console.log("result", result);
-    expect(result.patientUUID).toBe(data.patientUUID)
-    expect(result.doctorTimeslot?.id).toBe(data.timeslotId)
+    expect(result.patientUUID).toBe(data.patientUUID);
+    expect(result.doctorTimeslot?.id).toBe(data.timeslotId);
   });
 });
