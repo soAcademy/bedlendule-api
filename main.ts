@@ -21,3 +21,7 @@ AppRoutes.map((route) => {
 app.listen(5555, () => {
   console.log("Server started on port 5555");
 });
+
+app.get('/',(req: Request,res:Response)=>{
+  res.send("Hello")
+})
