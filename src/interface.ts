@@ -7,7 +7,6 @@ export const createUserCodec = strict({
     [UserTypeEnum.DOCTOR]: null,
     [UserTypeEnum.USER]: null,
   }),
-  uuid: t.string,
   username: t.string,
   password: t.string,
   email: t.string,
@@ -16,7 +15,9 @@ export const createUserCodec = strict({
   lastName: t.string,
 });
 
-export interface ICreateUser extends t.TypeOf<typeof createUserCodec> {}
+export interface ICreateUser extends t.TypeOf<typeof createUserCodec> {
+  uuid: string;
+}
 
 export const getUserDetailByUUIDCodec = t.type({ uuid: t.string });
 export interface IGetUserByUUID
@@ -147,8 +148,8 @@ export const bookTimeSlotCodec = t.type({
   patientUUID: t.string,
   timeslotId: t.number,
   meetingType: t.keyof({
-    [MeetingTypeEnum.OFFLINE]:null,
-    [MeetingTypeEnum.ONLINE]:null,
+    [MeetingTypeEnum.OFFLINE]: null,
+    [MeetingTypeEnum.ONLINE]: null,
   }),
   location: t.string,
 });

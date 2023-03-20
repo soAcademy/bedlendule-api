@@ -35,12 +35,14 @@ import {
   updateSchedule,
   updateUser,
 } from "./resolver";
+import { v4 as uuidv4 } from "uuid";
 
 export const createUserHandler = (req: Request, res: Response) => {
   try {
+    const uuid = uuidv4();
     const body = req?.body;
     if (createUserCodec.decode(body)._tag === "Right") {
-      return createUser(body)
+      return createUser({ ...body, uuid })
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
