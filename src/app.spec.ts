@@ -28,7 +28,6 @@ const prisma = new PrismaClient();
 describe("BEDLENDULE", () => {
   let uuid: string;
   test("createUser", async () => {
-    uuid = uuidv4();
     const data = {
       type: [UserTypeEnum.DOCTOR, UserTypeEnum.USER][
         Math.floor(Math.random() * 2)
@@ -70,10 +69,12 @@ describe("BEDLENDULE", () => {
         {
           startTime: new Date(startTime).toLocaleString(),
           finishTime: new Date(finishTime).toLocaleString(),
+          price: 600,
         },
         {
           startTime: new Date(startTime + 7200000).toLocaleString(),
           finishTime: new Date(finishTime + 10800000).toLocaleString(),
+          price: 600,
         },
       ],
     };

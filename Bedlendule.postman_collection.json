@@ -1,0 +1,599 @@
+{
+	"info": {
+		"_postman_id": "48fd248c-57fd-4663-a015-84b4855f57c9",
+		"name": "Bedlendule",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Example Request\",\r\n    \"description\": \"This is an example request\",\r\n    \"problemType\": \"DEPRESSION\",\r\n    \"price\": 1050,\r\n    \"meetingType\": \"ONLINE\",\r\n    \"startTime\": \"2023-03-28T20:00:00Z\",\r\n    \"finishTime\": \"2023-03-28T21:00:00Z\",\r\n    \"patientUUID\": \"3be79210-16ed-4224-b4a9-d351242b4e9b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSchedule",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getAllTimeSlots",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getAllTimeSlots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createRequest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Example Request\",\r\n    \"description\": \"This is an example request\",\r\n    \"problemType\": \"DEPRESSION\",\r\n    \"price\": 1050,\r\n    \"meetingType\": \"ONLINE\",\r\n    \"startTime\": \"2023-04-03T13:00:00Z\",\r\n    \"finishTime\": \"2023-04-03T14:00:00Z\",\r\n    \"patientUUID\": \"3be79210-16ed-4224-b4a9-d351242b4e9b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/createRequest",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"createRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"USER\",\r\n    \"username\": \"user2\",\r\n    \"password\": \"testpassword1\",\r\n    \"email\": \"testuser2@email.com\",\r\n    \"phoneNumber\": \"082-000-0000\",\r\n    \"firstName\": \"testFirstName2\",\r\n    \"lastName\": \"testLastName2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/createUser",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uuid\":\"ba797dc5-75d1-4a48-bc54-f5e45d53c02b\",\r\n    \"email\":\"(optional)updateEmail@email.com\", \r\n    \"phoneNumber\":\"(optional)082-000-0000\", \r\n    \"licenseId\":\"(optional)LIC-00153156\", \r\n    \"background\":\"(optional)Hello Moto\", \r\n    \"profilePictureUrl\": \"(optional)https://image.com/picture.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/updateUser",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"updateUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserDetailByUUID",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uuid\": \"f641413d-3924-416b-a727-3286d75cfb56\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getUserDetailByUUID",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getUserDetailByUUID"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createSchedule",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uuid\": \"ba797dc5-75d1-4a48-bc54-f5e45d53c02b\",\r\n    \"specialistInfo\": \"Depression Therapist\",\r\n    \"meetingType\": \"OFFLINE\",\r\n    \"location\": \"(optional)JOJO CLINIC\",\r\n    \"timeslots\": [\r\n        {\r\n            \"startTime\": \"2023-04-03T13:00:00Z\",\r\n            \"finishTime\": \"2023-04-03T14:00:00Z\",\r\n            \"price\": 600\r\n        },\r\n        {\r\n            \"startTime\": \"2023-04-03T14:00:00Z\",\r\n            \"finishTime\": \"2023-04-03T15:00:00Z\",\r\n            \"price\": 700\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/createSchedule",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"createSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTimeSlots",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getAllTimeSlots",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getAllTimeSlots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getScheduleByDate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uuid\": \"f641413d-3924-416b-a727-3286d75cfb56\",\r\n    \"date\": \"2023-03-21\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getScheduleByDate",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getScheduleByDate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getScheduleByUUID",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uuid\": \"ba797dc5-75d1-4a48-bc54-f5e45d53c02b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getScheduleByUUID",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getScheduleByUUID"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateSchedule",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"scheduleId\": 4,\r\n    \"addingTimeSlots\": [\r\n        {\r\n            \"startTime\": \"2023-04-08T14:00:00Z\",\r\n            \"finishTime\": \"2023-04-08T15:00:00Z\"\r\n        },\r\n        {\r\n            \"startTime\": \"2023-04-08T15:00:00Z\",\r\n            \"finishTime\": \"2023-04-08T16:00:00Z\"\r\n        }\r\n    ],\r\n    \"removingTimeSlots\": [5,6],\r\n    \"specialistInfo\": \"(optional)\",\r\n    \"meetingType\": \"OFFLINE\",\r\n    \"location\": \"JOJI CLINIC\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/updateSchedule",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"updateSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteSchedule",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"scheduleId\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/deleteSchedule",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"deleteSchedule"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createRequest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"NEED HELP\",\r\n    \"description\": \"Need a mental health therapist on 14-03-2023\",\r\n    \"price\": 500,\r\n    \"problemType\": \"MENTAL_HEALTH\",\r\n    \"meetingType\": \"ONLINE\",\r\n    \"location\": \"GOOGLE MEET\",\r\n    \"startTime\": \"2023-03-14T15:00:00Z\",\r\n    \"finishTime\": \"2023-03-14T16:00:00Z\",\r\n    \"patientUUID\": \"22e8ed57-d93e-4ba4-a958-85a7670ba702\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/createRequest",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"createRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOpeningRequests",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getOpeningRequests",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getOpeningRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOpeningRequestsByDate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-03-22\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getOpeningRequestsByDate",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getOpeningRequestsByDate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getRequestByRequestId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"requestId\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getRequestByRequestId",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getRequestByRequestId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getRequestsByUUID",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uuid\": \"3be79210-16ed-4224-b4a9-d351242b4e9b\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getRequestsByUUID",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getRequestsByUUID"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "acceptRequest",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"requestId\": 39,\r\n    \"uuid\": \"3462dca3-1506-44c4-b9f2-1466f7838c90\",\r\n    \"startTime\": \"2023-04-03 13:00:00.000\",\r\n    \"finishTime\":\"2023-04-03 14:00:00.000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/acceptRequest",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"acceptRequest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDoctors",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/getDoctors",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"getDoctors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bookTimeSlot",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"price\": 600,\r\n    \"startTime\": \"2023-04-03 13:00:00.000\",\r\n    \"finishTime\": \"2023-04-03 14:00:00.000\",\r\n    \"patientUUID\": \"22e8ed57-d93e-4ba4-a958-85a7670ba702\",\r\n    \"timeslotId\": 134,\r\n    \"meetingType\": \"ONLINE\",\r\n    \"location\": \"Zoom\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://bedlendule-backend.vercel.app/bedlendule/bookTimeSlot",
+					"protocol": "https",
+					"host": [
+						"bedlendule-backend",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"bedlendule",
+						"bookTimeSlot"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
