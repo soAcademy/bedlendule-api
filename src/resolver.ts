@@ -157,7 +157,11 @@ export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
       uuid: args.uuid,
     },
     include: {
-      timeslots: true,
+      timeslots: {
+        orderBy: {
+          id: 'asc'
+        }
+      },
     },
   });
 };
@@ -255,32 +259,36 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
 };
 
 export const acceptRequest = async (args: IAcceptRequest) => {
-  const request = await getRequestByRequestId({ requestId: args.requestId });
-  if (request.doctorTimeslot === null) {
-    return prisma.doctorTimeslot.create({
-      data: {
-        request: {
-          connect: {
-            id: args.requestId,
-          },
-        },
-        schedule: {
-          create: {
-            doctorUUID: {
-              connect: {
-                uuid: args.uuid,
-              },
+  try {
+    const request = await getRequestByRequestId({ requestId: args.requestId });
+    if (request.doctorTimeslot === null) {
+      return prisma.doctorTimeslot.create({
+        data: {
+          request: {
+            connect: {
+              id: args.requestId,
             },
-            meetingType: request.meetingType,
-            location: request.location,
           },
+          schedule: {
+            create: {
+              doctorUUID: {
+                connect: {
+                  uuid: args.uuid,
+                },
+              },
+              meetingType: request.meetingType,
+              location: request.location,
+            },
+          },
+          startTime: new Date(args.startTime),
+          finishTIme: new Date(args.finishTime),
         },
-        startTime: new Date(args.startTime),
-        finishTIme: new Date(args.finishTime),
-      },
-    });
-  } else {
-    throw new Error("Invalid request");
+      });
+    } else {
+      throw new Error("Invalid request");
+    }
+  } catch (err) {
+    throw new Error("Failed to get request");
   }
 };
 
