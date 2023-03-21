@@ -48,7 +48,13 @@ model Request {
 enum ProblemTypeEnum {
   MENTAL_HEALTH
   DEPRESSION
+  PANIC_DISORDER
+  SCHIZOPHRENIA
+  POST_TRAUMATIC_STRESS_DISORDER
+  BIPOLAR
+  DEMENTIA
   OTHER
+  PHOBIAS
 }
 
 model Schedule {
@@ -83,6 +89,6 @@ enum MeetingTypeEnum {
 }
 
 enum UserTypeEnum {
-  USER
+  PATIENT
   DOCTOR
 }

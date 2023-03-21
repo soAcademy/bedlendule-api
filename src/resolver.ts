@@ -30,6 +30,7 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
       uuid: args.uuid,
     },
     select: {
+      uuid: true,
       email: true,
       phoneNumber: true,
       firstName: true,
@@ -70,6 +71,7 @@ export const createSchedule = (args: ICreateSchedule) => {
       title: args.title,
       meetingType: args.meetingType,
       location: args.location,
+      description: args.description,
       timeslots: {
         create: args.timeslots.map((e) => {
           return {
@@ -80,6 +82,16 @@ export const createSchedule = (args: ICreateSchedule) => {
         }),
       },
     },
+    include:{
+      timeslots:{
+        select: {
+          id:true,
+          startTime: true,
+          finishTime: true,
+          price: true,
+        }
+      }
+    }
   });
 };
 
@@ -159,8 +171,8 @@ export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
     include: {
       timeslots: {
         orderBy: {
-          id: 'asc'
-        }
+          id: "asc",
+        },
       },
     },
   });
@@ -187,6 +199,18 @@ export const updateSchedule = async (args: IUpdateSchedule) => {
             id: e,
           };
         }),
+      },
+    },
+    include: {
+      timeslots: {
+        select: {
+          id: true,
+          requestId: true,
+          scheduleId: true,
+          startTime: true,
+          finishTime: true,
+          price: true,
+        },
       },
     },
   });

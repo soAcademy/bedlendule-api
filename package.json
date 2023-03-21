@@ -9,7 +9,8 @@
     "prisma:migrate": "yarn prisma migrate dev --name init --schema prisma/schema.prisma",
     "prisma:generate": "yarn pnpify prisma generate --schema=prisma/schema.prisma",
     "test": "jest --verbose",
-    "test:bd": "jest -- src/"
+    "test:bld": "jest -- src/app.spec.ts",
+    "test:seed": "jest -- src/seedData.spec.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",

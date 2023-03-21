@@ -5,7 +5,7 @@ import { optional, strict } from "io-ts-extra";
 export const createUserCodec = strict({
   type: t.keyof({
     [UserTypeEnum.DOCTOR]: null,
-    [UserTypeEnum.USER]: null,
+    [UserTypeEnum.PATIENT]: null,
   }),
   username: t.string,
   password: t.string,
@@ -40,6 +40,7 @@ export interface IGetSchedule extends t.TypeOf<typeof getScheduleCodec> {}
 export const createScheduleCodec = strict({
   uuid: t.string,
   title: t.string,
+  description: t.string,
   meetingType: t.keyof({
     [MeetingTypeEnum.OFFLINE]: null,
     [MeetingTypeEnum.ONLINE]: null,
@@ -128,7 +129,14 @@ export const createRequestCodec = strict({
   description: optional(t.string),
   problemType: t.keyof({
     [ProblemTypeEnum.DEPRESSION]: null,
+    [ProblemTypeEnum.BIPOLAR]: null,
+    [ProblemTypeEnum.DEMENTIA]: null,
+    [ProblemTypeEnum.SCHIZOPHRENIA]: null,
+    [ProblemTypeEnum.PANIC_DISORDER]: null,
     [ProblemTypeEnum.MENTAL_HEALTH]: null,
+    [ProblemTypeEnum.POST_TRAUMATIC_STRESS_DISORDER]: null,
+    [ProblemTypeEnum.PHOBIAS]: null,
+    [ProblemTypeEnum.OTHER]: null,
   }),
   price: t.number,
   meetingType: t.keyof({
