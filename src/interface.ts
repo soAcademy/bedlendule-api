@@ -39,7 +39,7 @@ export interface IGetSchedule extends t.TypeOf<typeof getScheduleCodec> {}
 
 export const createScheduleCodec = strict({
   uuid: t.string,
-  specialistInfo: t.string,
+  title: t.string,
   meetingType: t.keyof({
     [MeetingTypeEnum.OFFLINE]: null,
     [MeetingTypeEnum.ONLINE]: null,
@@ -80,7 +80,7 @@ export const updateScheduleCodec = strict({
     )
   ),
   removingTimeSlots: optional(t.array(t.number)),
-  specialistInfo: optional(t.string),
+  title: optional(t.string),
   meetingType: optional(
     t.keyof({
       [MeetingTypeEnum.OFFLINE]: null,

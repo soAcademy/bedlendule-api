@@ -67,14 +67,14 @@ export const createSchedule = (args: ICreateSchedule) => {
   return prisma.schedule.create({
     data: {
       uuid: args.uuid,
-      specialistInfo: args.specialistInfo,
+      title: args.title,
       meetingType: args.meetingType,
       location: args.location,
       timeslots: {
         create: args.timeslots.map((e) => {
           return {
             startTime: new Date(e.startTime),
-            finishTIme: new Date(e.finishTime),
+            finishTime: new Date(e.finishTime),
             price: e.price,
           };
         }),
@@ -103,7 +103,7 @@ export const getAllTimeSlots = () => {
         },
       },
       startTime: true,
-      finishTIme: true,
+      finishTime: true,
     },
   });
 };
@@ -127,7 +127,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
     },
     select: {
       id: true,
-      specialistInfo: true,
+      title: true,
       timeslots: {
         select: {
           id: true,
@@ -144,7 +144,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
             },
           },
           startTime: true,
-          finishTIme: true,
+          finishTime: true,
         },
       },
     },
@@ -172,14 +172,14 @@ export const updateSchedule = async (args: IUpdateSchedule) => {
       id: args.scheduleId,
     },
     data: {
-      specialistInfo: args.specialistInfo || undefined,
+      title: args.title || undefined,
       meetingType: args.meetingType || undefined,
       location: args.location || undefined,
       timeslots: {
         create: args.addingTimeSlots?.map((e) => {
           return {
             startTime: new Date(e.startTime),
-            finishTIme: new Date(e.finishTime),
+            finishTime: new Date(e.finishTime),
           };
         }),
         delete: args.removingTimeSlots?.map((e) => {
@@ -281,7 +281,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
             },
           },
           startTime: new Date(args.startTime),
-          finishTIme: new Date(args.finishTime),
+          finishTime: new Date(args.finishTime),
         },
       });
     } else {

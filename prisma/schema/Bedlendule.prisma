@@ -52,15 +52,16 @@ enum ProblemTypeEnum {
 }
 
 model Schedule {
-  id             Int              @id @default(autoincrement())
-  doctorUUID     User             @relation(fields: [uuid], references: [uuid])
-  uuid           String
-  specialistInfo String?
-  meetingType    MeetingTypeEnum  @default(ONLINE)
-  location       String?
-  timeslots      DoctorTimeslot[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id          Int              @id @default(autoincrement())
+  doctorUUID  User             @relation(fields: [uuid], references: [uuid])
+  uuid        String
+  title       String?          @default("title")
+  description String?
+  meetingType MeetingTypeEnum  @default(ONLINE)
+  location    String?
+  timeslots   DoctorTimeslot[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
 model DoctorTimeslot {
@@ -70,7 +71,7 @@ model DoctorTimeslot {
   schedule   Schedule @relation(fields: [scheduleId], references: [id])
   scheduleId Int
   startTime  DateTime
-  finishTIme DateTime
+  finishTime DateTime
   price      Float?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
