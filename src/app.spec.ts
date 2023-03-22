@@ -88,7 +88,7 @@ describe("BEDLENDULE", () => {
     const data = {
       uuid: doctorUUID,
       title: "Depression Therapist",
-      description: "Psychologist",
+      description: "I want to hear every bit of what's going wrong and how it's impacting you now. ",
       meetingType: MeetingTypeEnum.ONLINE,
       timeslots: [
         {
@@ -142,6 +142,9 @@ describe("BEDLENDULE", () => {
       scheduleId,
       title: "Mental Health Therapist",
       meetingType: MeetingTypeEnum.OFFLINE,
+      location: ["JOJO CLINIC", "JOJI CLINIC", "BOBO CLINIC", "BUBU CLINIC"][
+        Math.floor(Math.random() * 4)
+      ],
       removingTimeSlots: timeslotId,
       addingTimeSlots: [
         {
@@ -149,12 +152,14 @@ describe("BEDLENDULE", () => {
           finishTime: new Date(
             new Date().getTime() + 90000000
           ).toLocaleString(),
+          price: 600
         },
         {
           startTime: new Date(new Date().getTime() + 90000000).toLocaleString(),
           finishTime: new Date(
             new Date().getTime() + 93600000
           ).toLocaleString(),
+          price: 500
         },
       ],
     };
@@ -208,6 +213,7 @@ describe("createRequest", () => {
       problemType: ProblemTypeEnum.DEPRESSION,
       price: 500,
       meetingType: MeetingTypeEnum.ONLINE,
+      location: "ZOOM",
       startTime: new Date(new Date().getTime() + 3600000).toLocaleString(),
       finishTime: new Date(new Date().getTime() + 7200000).toLocaleString(),
       patientUUID: patientUUID,

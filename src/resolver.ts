@@ -82,16 +82,16 @@ export const createSchedule = (args: ICreateSchedule) => {
         }),
       },
     },
-    include:{
-      timeslots:{
+    include: {
+      timeslots: {
         select: {
-          id:true,
+          id: true,
           startTime: true,
           finishTime: true,
           price: true,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 };
 
@@ -170,6 +170,22 @@ export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
     },
     include: {
       timeslots: {
+        select: {
+          id: true,
+          price: true,
+          startTime: true,
+          finishTime: true,
+          request: {
+            select: {
+              patient: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+            },
+          },
+        },
         orderBy: {
           id: "asc",
         },
@@ -192,6 +208,7 @@ export const updateSchedule = async (args: IUpdateSchedule) => {
           return {
             startTime: new Date(e.startTime),
             finishTime: new Date(e.finishTime),
+            price: e.price,
           };
         }),
         delete: args.removingTimeSlots?.map((e) => {
@@ -302,10 +319,13 @@ export const acceptRequest = async (args: IAcceptRequest) => {
               },
               meetingType: request.meetingType,
               location: request.location,
+              description: "Accept Request",
+              title: "Patient Request",
             },
           },
           startTime: new Date(args.startTime),
           finishTime: new Date(args.finishTime),
+          price: request.price,
         },
       });
     } else {

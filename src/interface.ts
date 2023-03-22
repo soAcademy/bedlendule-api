@@ -77,6 +77,7 @@ export const updateScheduleCodec = strict({
       t.type({
         startTime: t.string,
         finishTime: t.string,
+        price: t.number,
       })
     )
   ),
