@@ -164,3 +164,9 @@ export const bookTimeSlotCodec = t.type({
 });
 
 export interface IBookTimeSlot extends t.TypeOf<typeof bookTimeSlotCodec> {}
+
+export interface IReviewDoctor{
+  review:string;
+  score:number;
+  doctorId:number;
+}

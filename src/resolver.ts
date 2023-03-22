@@ -15,7 +15,9 @@ import {
   IGetUserByUUID,
   IUpdateSchedule,
   IUpdateUser,
+  IReviewDoctor,
 } from "./interface";
+import { includes } from "fp-ts/lib/string";
 export const prisma = new PrismaClient();
 
 export const createUser = (args: ICreateUser) => {
@@ -82,16 +84,16 @@ export const createSchedule = (args: ICreateSchedule) => {
         }),
       },
     },
-    include:{
-      timeslots:{
+    include: {
+      timeslots: {
         select: {
-          id:true,
+          id: true,
           startTime: true,
           finishTime: true,
           price: true,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 };
 
@@ -378,6 +380,16 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
     },
     include: {
       doctorTimeslot: true,
+    },
+  });
+};
+
+export const reviewDoctor = (args: IReviewDoctor) => {
+  return prisma.review.create({
+    data: {
+      review: args.review,
+      score: args.score,
+      doctorId: args.doctorId,
     },
   });
 };
