@@ -15,6 +15,7 @@ import {
   IUpdateUser,
   IGetScheduleByDateAndUUID,
   IGetScheduleByDate,
+  ICreateReview,
 } from "./interface";
 export const prisma = new PrismaClient();
 
@@ -178,11 +179,11 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
     select: {
       doctorUUID: {
         select: {
-          firstName:true,
-          lastName:true,
+          firstName: true,
+          lastName: true,
           reviews: true,
           uuid: true,
-        }
+        },
       },
       id: true,
       description: true,
@@ -190,7 +191,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
       timeslots: {
         select: {
           id: true,
-          requestId:true,
+          requestId: true,
         },
       },
     },
@@ -332,7 +333,7 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
     },
     include: {
       doctorTimeslot: true,
-      review:true,
+      review: true,
     },
   });
 };
@@ -436,6 +437,39 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
     },
     include: {
       doctorTimeslot: true,
+    },
+  });
+};
+
+export const createReview = (args: ICreateReview) => {
+  return prisma.request.update({
+    where: {
+      id: args.requestId,
+    },
+    data: {
+      doctorTimeslot: {
+        update: {
+          schedule: {
+            update: {
+              doctorUUID: {
+                update: {
+                  reviews: {
+                    create: {
+                      score: args.score,
+                      review: args.review,
+                      request: {
+                        connect: {
+                          id: args.requestId,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 };

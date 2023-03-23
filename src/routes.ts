@@ -17,6 +17,7 @@ import {
   updateScheduleHandler,
   updateUserHandler,
   getScheduleByDateAndUUIDHandler,
+  createReviewHandler,
 } from "./handler";
 
 export const AppRoutes = [
@@ -109,5 +110,10 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/bookTimeSlot",
     action: bookTimeSlotHandler,
+  },
+  {
+    method: "post",
+    path: "/bedlendule/createReview",
+    action: createReviewHandler,
   },
 ];
