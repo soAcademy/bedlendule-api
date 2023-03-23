@@ -332,6 +332,7 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
     },
     include: {
       doctorTimeslot: true,
+      review:true,
     },
   });
 };
