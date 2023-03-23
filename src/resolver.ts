@@ -176,25 +176,21 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
       },
     },
     select: {
+      doctorUUID: {
+        select: {
+          firstName:true,
+          lastName:true,
+          reviews: true,
+          uuid: true,
+        }
+      },
       id: true,
-      title: true,
+      description: true,
+      meetingType: true,
       timeslots: {
         select: {
           id: true,
-          request: {
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              problemType: true,
-              meetingType: true,
-              location: true,
-              startTime: true,
-              finishTime: true,
-            },
-          },
-          startTime: true,
-          finishTime: true,
+          requestId:true,
         },
       },
     },
