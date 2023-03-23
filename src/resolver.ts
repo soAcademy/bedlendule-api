@@ -10,12 +10,16 @@ import {
   IGetRequestByUUID,
   IGetRequestByRequestId,
   IGetSCheduleByUUID,
-  IGetSchedule,
-  IGetScheduleByDate,
   IGetUserByUUID,
   IUpdateSchedule,
   IUpdateUser,
+<<<<<<< HEAD
   IReviewDoctor,
+=======
+  IGetScheduleByDateAndUUID,
+  IGetScheduleByDate,
+  ICreateReview,
+>>>>>>> 90004d8ad109282902c244280ed98c204aa5b145
 } from "./interface";
 import { includes } from "fp-ts/lib/string";
 export const prisma = new PrismaClient();
@@ -122,7 +126,7 @@ export const getAllTimeSlots = () => {
   });
 };
 
-export const getScheduleByDate = (args: IGetScheduleByDate) => {
+export const getScheduleByDateAndUUID = (args: IGetScheduleByDateAndUUID) => {
   return prisma.schedule.findMany({
     where: {
       AND: [
@@ -166,6 +170,40 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
   });
 };
 
+export const getScheduleByDate = (args: IGetScheduleByDate) => {
+  return prisma.schedule.findMany({
+    where: {
+      timeslots: {
+        some: {
+          startTime: {
+            gte: new Date(args.date),
+            lte: new Date(new Date(args.date).getTime() + 86400000),
+          },
+        },
+      },
+    },
+    select: {
+      doctorUUID: {
+        select: {
+          firstName: true,
+          lastName: true,
+          reviews: true,
+          uuid: true,
+        },
+      },
+      id: true,
+      description: true,
+      meetingType: true,
+      timeslots: {
+        select: {
+          id: true,
+          requestId: true,
+        },
+      },
+    },
+  });
+};
+
 export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
   return prisma.schedule.findMany({
     where: {
@@ -173,6 +211,22 @@ export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
     },
     include: {
       timeslots: {
+        select: {
+          id: true,
+          price: true,
+          startTime: true,
+          finishTime: true,
+          request: {
+            select: {
+              patient: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+            },
+          },
+        },
         orderBy: {
           id: "asc",
         },
@@ -195,6 +249,7 @@ export const updateSchedule = async (args: IUpdateSchedule) => {
           return {
             startTime: new Date(e.startTime),
             finishTime: new Date(e.finishTime),
+            price: e.price,
           };
         }),
         delete: args.removingTimeSlots?.map((e) => {
@@ -282,6 +337,10 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
     where: {
       patientUUID: args.uuid,
     },
+    include: {
+      doctorTimeslot: true,
+      review: true,
+    },
   });
 };
 
@@ -305,10 +364,13 @@ export const acceptRequest = async (args: IAcceptRequest) => {
               },
               meetingType: request.meetingType,
               location: request.location,
+              description: "Accept Request",
+              title: "Patient Request",
             },
           },
           startTime: new Date(args.startTime),
           finishTime: new Date(args.finishTime),
+          price: request.price,
         },
       });
     } else {
@@ -385,12 +447,44 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
   });
 };
 
+<<<<<<< HEAD
 export const reviewDoctor = (args: IReviewDoctor) => {
   return prisma.review.create({
     data: {
       review: args.review,
       score: args.score,
       doctorId: args.doctorId,
+=======
+export const createReview = (args: ICreateReview) => {
+  return prisma.request.update({
+    where: {
+      id: args.requestId,
+    },
+    data: {
+      doctorTimeslot: {
+        update: {
+          schedule: {
+            update: {
+              doctorUUID: {
+                update: {
+                  reviews: {
+                    create: {
+                      score: args.score,
+                      review: args.review,
+                      request: {
+                        connect: {
+                          id: args.requestId,
+                        }, 
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+>>>>>>> 90004d8ad109282902c244280ed98c204aa5b145
     },
   });
 };

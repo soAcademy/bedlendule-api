@@ -69,50 +69,50 @@ let timeslotIdToBeBooked: number;
 //     expect(result.uuid).toBe(doctorUUID);
 //   });
 
-//   test("updateUser", async () => {
-//     const data = {
-//       uuid: doctorUUID,
-//       email: "UpdatedEmail" + new Date().getTime(),
-//       licenseId: "TEST-LIC-01" + new Date().getTime(),
-//     };
-//     const result = await updateUser(data);
-//     // console.log("updateUser", result);
-//     expect(result.uuid).toBe(data.uuid);
-//     expect(result.email).toBe(data.email);
-//     expect(result.licenseId).toBe(data.licenseId);
-//   });
-//   let scheduleId: number;
-//   let timeslotId: number[];
-//   test("createSchedule", async () => {
-//     const startTime = new Date().getTime() + 86400000;
-//     const finishTime = startTime + 3600000;
-//     const data = {
-//       uuid: doctorUUID,
-//       title: "Depression Therapist",
-//       description: "Psychologist",
-//       meetingType: MeetingTypeEnum.ONLINE,
-//       timeslots: [
-//         {
-//           startTime: new Date(startTime).toLocaleString(),
-//           finishTime: new Date(finishTime).toLocaleString(),
-//           price: 600,
-//         },
-//         {
-//           startTime: new Date(startTime + 7200000).toLocaleString(),
-//           finishTime: new Date(finishTime + 10800000).toLocaleString(),
-//           price: 600,
-//         },
-//       ],
-//     };
-//     const result = await createSchedule(data);
-//     scheduleId = result.id;
-//     timeslotId = result.timeslots.map((timeslot) => timeslot.id);
-//     // console.log("createSchedule", result);
-//     expect(result.uuid).toBe(data.uuid);
-//     expect(result.title).toBe(data.title);
-//     expect(result.description).toBe(data.description);
-//     expect(result.meetingType).toBe(data.meetingType);
-//   });
+  test("updateUser", async () => {
+    const data = {
+      uuid: doctorUUID,
+      email: "UpdatedEmail" + new Date().getTime(),
+      licenseId: "TEST-LIC-01" + new Date().getTime(),
+    };
+    const result = await updateUser(data);
+    // console.log("updateUser", result);
+    expect(result.uuid).toBe(data.uuid);
+    expect(result.email).toBe(data.email);
+    expect(result.licenseId).toBe(data.licenseId);
+  });
+  let scheduleId: number;
+  let timeslotId: number[];
+  test("createSchedule", async () => {
+    const startTime = new Date().getTime() + 86400000;
+    const finishTime = startTime + 3600000;
+    const data = {
+      uuid: doctorUUID,
+      title: "Depression Therapist",
+      description: "I want to hear every bit of what's going wrong and how it's impacting you now. ",
+      meetingType: MeetingTypeEnum.ONLINE,
+      timeslots: [
+        {
+          startTime: new Date(startTime).toLocaleString(),
+          finishTime: new Date(finishTime).toLocaleString(),
+          price: 600,
+        },
+        {
+          startTime: new Date(startTime + 7200000).toLocaleString(),
+          finishTime: new Date(finishTime + 10800000).toLocaleString(),
+          price: 600,
+        },
+      ],
+    };
+    const result = await createSchedule(data);
+    scheduleId = result.id;
+    timeslotId = result.timeslots.map((timeslot) => timeslot.id);
+    // console.log("createSchedule", result);
+    expect(result.uuid).toBe(data.uuid);
+    expect(result.title).toBe(data.title);
+    expect(result.description).toBe(data.description);
+    expect(result.meetingType).toBe(data.meetingType);
+  });
 
 //   test("getAllTimeSlots", async () => {
 //     const result = await getAllTimeSlots();
@@ -130,90 +130,96 @@ let timeslotIdToBeBooked: number;
 //     expect(result.length > 0).toBe(true);
 //   });
 
-//   test("getScheduleByUUID", async () => {
-//     const uuid = doctorUUID;
-//     const result = await getScheduleByUUID({ uuid });
-//     console.log("getScheduleByUUID", result);
-//     expect(result).toEqual(
-//       expect.arrayContaining([expect.objectContaining({ uuid: uuid })])
-//     );
-//   });
-//   test("updateSchedule", async () => {
-//     const data = {
-//       scheduleId,
-//       title: "Mental Health Therapist",
-//       meetingType: MeetingTypeEnum.OFFLINE,
-//       removingTimeSlots: timeslotId,
-//       addingTimeSlots: [
-//         {
-//           startTime: new Date(new Date().getTime() + 86400000).toLocaleString(),
-//           finishTime: new Date(
-//             new Date().getTime() + 90000000
-//           ).toLocaleString(),
-//         },
-//         {
-//           startTime: new Date(new Date().getTime() + 90000000).toLocaleString(),
-//           finishTime: new Date(
-//             new Date().getTime() + 93600000
-//           ).toLocaleString(),
-//         },
-//       ],
-//     };
-//     const result = await updateSchedule(data);
-//     timeslotIdToBeBooked = result.timeslots[0].id;
-//     expect(result.title).toBe(data.title);
-//     expect(result.meetingType).toBe(data.meetingType);
-//     expect(result.id).toBe(scheduleId);
-//     expect(result.timeslots).not.toEqual(
-//       expect.arrayContaining([
-//         expect.objectContaining({
-//           id: timeslotId[0],
-//         }),
-//       ])
-//     );
-//     // console.log("updateSchedule", result);
-//   });
-//   test("deleteSchedule", async () => {
-//     const startTime = new Date().getTime() + 86400000;
-//     const finishTime = startTime + 3600000;
-//     const data = {
-//       uuid: doctorUUID,
-//       title: "Depression Therapist",
-//       description: "Psychologist",
-//       meetingType: MeetingTypeEnum.ONLINE,
-//       timeslots: [
-//         {
-//           startTime: new Date(startTime).toLocaleString(),
-//           finishTime: new Date(finishTime).toLocaleString(),
-//           price: 600,
-//         },
-//         {
-//           startTime: new Date(startTime + 7200000).toLocaleString(),
-//           finishTime: new Date(finishTime + 10800000).toLocaleString(),
-//           price: 600,
-//         },
-//       ],
-//     };
-//     const schedule = await createSchedule(data);
-//     const result = await deleteSchedule({ scheduleId: schedule.id });
-//     // console.log("deleteSchedule", result);
-//     expect(result.id).toBe(schedule.id);
-//   });
-// });
-// let createdRequest: any;
-// describe("createRequest", () => {
-//   it("should create a request with the given arguments", async () => {
-//     const requestArgs = {
-//       title: "Example Request",
-//       description: "This is an example request",
-//       problemType: ProblemTypeEnum.DEPRESSION,
-//       price: 500,
-//       meetingType: MeetingTypeEnum.ONLINE,
-//       startTime: new Date(new Date().getTime() + 3600000).toLocaleString(),
-//       finishTime: new Date(new Date().getTime() + 7200000).toLocaleString(),
-//       patientUUID: patientUUID,
-//     };
+  test("getScheduleByUUID", async () => {
+    const uuid = doctorUUID;
+    const result = await getScheduleByUUID({ uuid });
+    console.log("getScheduleByUUID", result);
+    expect(result).toEqual(
+      expect.arrayContaining([expect.objectContaining({ uuid: uuid })])
+    );
+  });
+  test("updateSchedule", async () => {
+    const data = {
+      scheduleId,
+      title: "Mental Health Therapist",
+      meetingType: MeetingTypeEnum.OFFLINE,
+      location: ["JOJO CLINIC", "JOJI CLINIC", "BOBO CLINIC", "BUBU CLINIC"][
+        Math.floor(Math.random() * 4)
+      ],
+      removingTimeSlots: timeslotId,
+      addingTimeSlots: [
+        {
+          startTime: new Date(new Date().getTime() + 86400000).toLocaleString(),
+          finishTime: new Date(
+            new Date().getTime() + 90000000
+          ).toLocaleString(),
+          price: 600
+        },
+        {
+          startTime: new Date(new Date().getTime() + 90000000).toLocaleString(),
+          finishTime: new Date(
+            new Date().getTime() + 93600000
+          ).toLocaleString(),
+          price: 500
+        },
+      ],
+    };
+    const result = await updateSchedule(data);
+    timeslotIdToBeBooked = result.timeslots[0].id;
+    expect(result.title).toBe(data.title);
+    expect(result.meetingType).toBe(data.meetingType);
+    expect(result.id).toBe(scheduleId);
+    expect(result.timeslots).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: timeslotId[0],
+        }),
+      ])
+    );
+    // console.log("updateSchedule", result);
+  });
+  test("deleteSchedule", async () => {
+    const startTime = new Date().getTime() + 86400000;
+    const finishTime = startTime + 3600000;
+    const data = {
+      uuid: doctorUUID,
+      title: "Depression Therapist",
+      description: "Psychologist",
+      meetingType: MeetingTypeEnum.ONLINE,
+      timeslots: [
+        {
+          startTime: new Date(startTime).toLocaleString(),
+          finishTime: new Date(finishTime).toLocaleString(),
+          price: 600,
+        },
+        {
+          startTime: new Date(startTime + 7200000).toLocaleString(),
+          finishTime: new Date(finishTime + 10800000).toLocaleString(),
+          price: 600,
+        },
+      ],
+    };
+    const schedule = await createSchedule(data);
+    const result = await deleteSchedule({ scheduleId: schedule.id });
+    // console.log("deleteSchedule", result);
+    expect(result.id).toBe(schedule.id);
+  });
 
+let createdRequest: any;
+describe("createRequest", () => {
+  it("should create a request with the given arguments", async () => {
+    const requestArgs = {
+      title: "Example Request",
+      description: "This is an example request",
+      problemType: ProblemTypeEnum.DEPRESSION,
+      price: 500,
+      meetingType: MeetingTypeEnum.ONLINE,
+      location: "ZOOM",
+      startTime: new Date(new Date().getTime() + 3600000).toLocaleString(),
+      finishTime: new Date(new Date().getTime() + 7200000).toLocaleString(),
+      patientUUID: patientUUID,
+    };
+  )
 //     createdRequest = await createRequest(requestArgs);
 //     expect(createdRequest.title).toBe(requestArgs.title);
 //     expect(createdRequest.description).toBe(requestArgs.description);

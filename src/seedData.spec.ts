@@ -47,6 +47,9 @@ import * as t from "io-ts";
       const nSchedule = [...Array(Math.ceil(Math.random() * 4)).keys()];
       const result = await Promise.all(
         nSchedule.map(async () => {
+          const meetingType = [MeetingTypeEnum.ONLINE, MeetingTypeEnum.OFFLINE][
+            Math.floor(Math.random() * 2)
+          ];
           const startTime =
             new Date(new Date().toLocaleDateString()).getTime() +
             86400000 * Math.ceil(Math.random() * 30) +
@@ -55,8 +58,15 @@ import * as t from "io-ts";
           const data = {
             uuid: doctorUUID,
             title: "Depression Therapist",
-            description: "Psychologist",
-            meetingType: MeetingTypeEnum.ONLINE,
+            description:
+              "You may not feel like it right now but thats my job. I want to hear every bit of what's going wrong and how it's impacting you now. At the same time we'll work on developing your belief in yourself in order to actually use the coping skills you probably already have.",
+            meetingType,
+            location:
+              meetingType === MeetingTypeEnum.ONLINE
+                ? "ZOOM"
+                : ["JOJO CLINIC", "JOJI CLINIC", "BOBO CLINIC", "BUBU CLINIC"][
+                    Math.floor(Math.random() * 4)
+                  ],
             timeslots: [
               {
                 startTime: new Date(startTime).toLocaleString(),
@@ -78,6 +88,11 @@ import * as t from "io-ts";
     });
 
     test("should create a request with the given arguments", async () => {
+      const startTime =
+        new Date(new Date().toLocaleDateString()).getTime() +
+        86400000 * Math.ceil(Math.random() * 30) +
+        3600000 * Math.ceil(Math.random() * 24);
+      const finishTime = startTime + 1800000 * Math.ceil(Math.random() * 2);
       const requestArgs = {
         title: "Example Request",
         description: "This is an example request",
@@ -95,8 +110,8 @@ import * as t from "io-ts";
         meetingType: [MeetingTypeEnum.ONLINE, MeetingTypeEnum.OFFLINE][
           Math.floor(Math.random() * 2)
         ],
-        startTime: "2023-03-22T09:00:00Z",
-        finishTime: "2023-03-22T10:00:00Z",
+        startTime: new Date(startTime).toLocaleString(),
+        finishTime: new Date(finishTime).toLocaleString(),
         patientUUID: patientUUID,
       };
 

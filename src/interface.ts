@@ -57,11 +57,17 @@ export const createScheduleCodec = strict({
 export interface ICreateSchedule extends t.TypeOf<typeof createScheduleCodec> {}
 
 export const getScheduleByDateCodec = t.type({
-  uuid: t.string,
   date: t.string,
 });
 export interface IGetScheduleByDate
   extends t.TypeOf<typeof getScheduleByDateCodec> {}
+
+export const getScheduleByDateAndUUIDCodec = t.type({
+  uuid: t.string,
+  date: t.string,
+});
+export interface IGetScheduleByDateAndUUID
+  extends t.TypeOf<typeof getScheduleByDateAndUUIDCodec> {}
 
 export const getScheduleByUUIDCodec = t.type({
   uuid: t.string,
@@ -77,6 +83,7 @@ export const updateScheduleCodec = strict({
       t.type({
         startTime: t.string,
         finishTime: t.string,
+        price: t.number,
       })
     )
   ),
@@ -165,8 +172,18 @@ export const bookTimeSlotCodec = t.type({
 
 export interface IBookTimeSlot extends t.TypeOf<typeof bookTimeSlotCodec> {}
 
+<<<<<<< HEAD
 export interface IReviewDoctor{
   review:string;
   score:number;
   doctorId:number;
 }
+=======
+export const createReviewCodec = strict({
+  requestId: t.number,
+  score: t.number,
+  review: optional(t.string),
+});
+
+export interface ICreateReview extends t.TypeOf<typeof createReviewCodec> {}
+>>>>>>> 90004d8ad109282902c244280ed98c204aa5b145

@@ -3,12 +3,14 @@ import {
   acceptRequestCodec,
   bookTimeSlotCodec,
   createRequestCodec,
+  createReviewCodec,
   createScheduleCodec,
   createUserCodec,
   deleteScheduleCodec,
   getOpeningRequestsByDateCodec,
   getRequestByRequestIdCodec,
   getRequestsByUUIDCodec,
+  getScheduleByDateAndUUIDCodec,
   getScheduleByDateCodec,
   getScheduleByUUIDCodec,
   getScheduleCodec,
@@ -34,6 +36,8 @@ import {
   getUserDetailByUUID,
   updateSchedule,
   updateUser,
+  getScheduleByDateAndUUID,
+  createReview,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 
@@ -113,6 +117,24 @@ export const getScheduleByDateHandler = (req: Request, res: Response) => {
     const body = req?.body;
     if (getScheduleByDateCodec.decode(body)._tag === "Right") {
       return getScheduleByDate(body)
+        .then((response) => res.status(200).json(response))
+        .catch((err) => res.status(500).send(err));
+    } else {
+      res.status(500).send("Failed To Validate Codec");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const getScheduleByDateAndUUIDHandler = (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const body = req?.body;
+    if (getScheduleByDateAndUUIDCodec.decode(body)._tag === "Right") {
+      return getScheduleByDateAndUUID(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -271,6 +293,21 @@ export const bookTimeSlotHandler = (req: Request, res: Response) => {
     const body = req?.body;
     if (bookTimeSlotCodec.decode(body)._tag === "Right") {
       return bookTimeSlot(body)
+        .then((response) => res.status(200).json(response))
+        .catch((err) => res.status(500).send(err));
+    } else {
+      res.status(500).send("Failed To Validate Codec");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const createReviewHandler = (req: Request, res: Response) => {
+  try {
+    const body = req?.body;
+    if (createReviewCodec.decode(body)._tag === "Right") {
+      return createReview(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
