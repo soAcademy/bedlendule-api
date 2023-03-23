@@ -296,6 +296,9 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
     where: {
       patientUUID: args.uuid,
     },
+    include:{
+      doctorTimeslot: true,
+    }
   });
 };
 
