@@ -142,6 +142,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
     select: {
       id: true,
       title: true,
+      doctorUUID: { select: { firstName: true, lastName: true, reviews:{select:{score:true}}} },
       timeslots: {
         select: {
           id: true,
