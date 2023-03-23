@@ -159,6 +159,9 @@ export const getScheduleByDateAndUUID = (args: IGetScheduleByDateAndUUID) => {
           startTime: true,
           finishTime: true,
         },
+        orderBy: {
+          startTime: "asc",
+        },
       },
     },
   });
@@ -460,7 +463,7 @@ export const createReview = (args: ICreateReview) => {
                       request: {
                         connect: {
                           id: args.requestId,
-                        }, 
+                        },
                       },
                     },
                   },
