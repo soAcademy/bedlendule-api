@@ -57,11 +57,17 @@ export const createScheduleCodec = strict({
 export interface ICreateSchedule extends t.TypeOf<typeof createScheduleCodec> {}
 
 export const getScheduleByDateCodec = t.type({
-  uuid: t.string,
   date: t.string,
 });
 export interface IGetScheduleByDate
   extends t.TypeOf<typeof getScheduleByDateCodec> {}
+
+export const getScheduleByDateAndUUIDCodec = t.type({
+  uuid: t.string,
+  date: t.string,
+});
+export interface IGetScheduleByDateAndUUID
+  extends t.TypeOf<typeof getScheduleByDateAndUUIDCodec> {}
 
 export const getScheduleByUUIDCodec = t.type({
   uuid: t.string,

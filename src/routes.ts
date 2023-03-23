@@ -16,6 +16,7 @@ import {
   getUserDetailByUUIDHandler,
   updateScheduleHandler,
   updateUserHandler,
+  getScheduleByDateAndUUIDHandler,
 } from "./handler";
 
 export const AppRoutes = [
@@ -48,6 +49,11 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/getScheduleByDate",
     action: getScheduleByDateHandler,
+  },
+  {
+    method: "post",
+    path: "/bedlendule/getScheduleByDateAndUUID",
+    action: getScheduleByDateAndUUIDHandler,
   },
   {
     method: "post",

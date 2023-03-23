@@ -10,11 +10,11 @@ import {
   IGetRequestByUUID,
   IGetRequestByRequestId,
   IGetSCheduleByUUID,
-  IGetSchedule,
-  IGetScheduleByDate,
   IGetUserByUUID,
   IUpdateSchedule,
   IUpdateUser,
+  IGetScheduleByDateAndUUID,
+  IGetScheduleByDate,
 } from "./interface";
 export const prisma = new PrismaClient();
 
@@ -120,7 +120,7 @@ export const getAllTimeSlots = () => {
   });
 };
 
-export const getScheduleByDate = (args: IGetScheduleByDate) => {
+export const getScheduleByDateAndUUID = (args: IGetScheduleByDateAndUUID) => {
   return prisma.schedule.findMany({
     where: {
       AND: [
@@ -136,6 +136,44 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
           },
         },
       ],
+    },
+    select: {
+      id: true,
+      title: true,
+      timeslots: {
+        select: {
+          id: true,
+          request: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              problemType: true,
+              meetingType: true,
+              location: true,
+              startTime: true,
+              finishTime: true,
+            },
+          },
+          startTime: true,
+          finishTime: true,
+        },
+      },
+    },
+  });
+};
+
+export const getScheduleByDate = (args: IGetScheduleByDate) => {
+  return prisma.schedule.findMany({
+    where: {
+      timeslots: {
+        some: {
+          startTime: {
+            gte: new Date(args.date),
+            lte: new Date(new Date(args.date).getTime() + 86400000),
+          },
+        },
+      },
     },
     select: {
       id: true,
@@ -296,9 +334,9 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
     where: {
       patientUUID: args.uuid,
     },
-    include:{
+    include: {
       doctorTimeslot: true,
-    }
+    },
   });
 };
 

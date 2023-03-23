@@ -9,6 +9,7 @@ import {
   getOpeningRequestsByDateCodec,
   getRequestByRequestIdCodec,
   getRequestsByUUIDCodec,
+  getScheduleByDateAndUUIDCodec,
   getScheduleByDateCodec,
   getScheduleByUUIDCodec,
   getScheduleCodec,
@@ -34,6 +35,7 @@ import {
   getUserDetailByUUID,
   updateSchedule,
   updateUser,
+  getScheduleByDateAndUUID,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 
@@ -113,6 +115,21 @@ export const getScheduleByDateHandler = (req: Request, res: Response) => {
     const body = req?.body;
     if (getScheduleByDateCodec.decode(body)._tag === "Right") {
       return getScheduleByDate(body)
+        .then((response) => res.status(200).json(response))
+        .catch((err) => res.status(500).send(err));
+    } else {
+      res.status(500).send("Failed To Validate Codec");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const getScheduleByDateAndUUIDHandler = (req: Request, res: Response) => {
+  try {
+    const body = req?.body;
+    if (getScheduleByDateAndUUIDCodec.decode(body)._tag === "Right") {
+      return getScheduleByDateAndUUID(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
