@@ -460,7 +460,7 @@ export const createReview = (args: ICreateReview) => {
                       request: {
                         connect: {
                           id: args.requestId,
-                        },
+                        }, 
                       },
                     },
                   },
