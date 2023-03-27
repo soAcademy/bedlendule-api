@@ -179,6 +179,7 @@ export const createReviewCodec = strict({
   requestId: t.number,
   score: t.number,
   review: optional(t.string),
+  timeSlotId: t.number
 });
 
 export interface ICreateReview extends t.TypeOf<typeof createReviewCodec> {}

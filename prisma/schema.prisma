@@ -31,7 +31,7 @@ model Review {
 }
 
 model Request {
-  id             Int             @id @default(autoincrement())
+  id             Int              @id @default(autoincrement())
   title          String
   description    String?
   problemType    ProblemTypeEnum
@@ -40,13 +40,13 @@ model Request {
   location       String?
   startTime      DateTime
   finishTime     DateTime
-  patient        User            @relation(fields: [patientUUID], references: [uuid])
+  patient        User             @relation(fields: [patientUUID], references: [uuid])
   patientUUID    String
-  doctorTimeslot DoctorTimeslot?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  doctorTimeslot DoctorTimeslot[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   review         Review?
-  status         RequestStatus?  @default(OPEN)
+  status         RequestStatus?   @default(OPEN)
 }
 
 enum RequestStatus {
@@ -83,7 +83,7 @@ model Schedule {
 model DoctorTimeslot {
   id         Int      @id @default(autoincrement())
   request    Request? @relation(fields: [requestId], references: [id])
-  requestId  Int?     @unique
+  requestId  Int?
   schedule   Schedule @relation(fields: [scheduleId], references: [id])
   scheduleId Int
   startTime  DateTime

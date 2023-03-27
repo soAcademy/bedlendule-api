@@ -42,7 +42,7 @@ model Request {
   finishTime     DateTime
   patient        User            @relation(fields: [patientUUID], references: [uuid])
   patientUUID    String
-  doctorTimeslot DoctorTimeslot?
+  doctorTimeslot DoctorTimeslot[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   review         Review?
@@ -82,7 +82,7 @@ model Schedule {
 model DoctorTimeslot {
   id         Int      @id @default(autoincrement())
   request    Request? @relation(fields: [requestId], references: [id])
-  requestId  Int?     @unique
+  requestId  Int?
   schedule   Schedule @relation(fields: [scheduleId], references: [id])
   scheduleId Int
   startTime  DateTime
