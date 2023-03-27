@@ -310,7 +310,7 @@ export const getOpeningRequests = () => {
   return prisma.request.findMany({
     where: {
       status: {
-        not: "CHOOSEN",
+        not: "CHOSEN",
       },
     },
     include: {
@@ -323,7 +323,7 @@ export const getOpeningRequestsByDate = (args: IGetOpeningRequestsByDate) => {
   return prisma.request.findMany({
     where: {
       status: {
-        not: "CHOOSEN",
+        not: "CHOSEN",
       },
       startTime: {
         gte: new Date(args.date),
@@ -359,7 +359,7 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
-    if (request.status !== RequestStatus.CHOOSEN) {
+    if (request.status !== RequestStatus.CHOSEN) {
       const _request = await prisma.request.update({
         where: { id: args.requestId },
         data: {

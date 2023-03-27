@@ -52,7 +52,7 @@ model Request {
 enum RequestStatus {
   OPEN
   ACCEPTED
-  CHOOSEN
+  CHOSEN
 }
 
 enum ProblemTypeEnum {
