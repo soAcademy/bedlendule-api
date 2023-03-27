@@ -353,7 +353,9 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
       doctorTimeslot: {
         include:{
           schedule: {
-
+            include:{
+              doctorUUID: true, 
+            }
           }
         }
       },
