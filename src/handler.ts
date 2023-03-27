@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   acceptRequestCodec,
   bookTimeSlotCodec,
+  chooseDoctorCodec,
   createRequestCodec,
   createReviewCodec,
   createScheduleCodec,
@@ -40,6 +41,7 @@ import {
   getScheduleByDateAndUUID,
   createReview,
   deleteRequest,
+  chooseDoctor,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 
@@ -325,6 +327,21 @@ export const createReviewHandler = (req: Request, res: Response) => {
     const body = req?.body;
     if (createReviewCodec.decode(body)._tag === "Right") {
       return createReview(body)
+        .then((response) => res.status(200).json(response))
+        .catch((err) => res.status(500).send(err));
+    } else {
+      res.status(500).send("Failed To Validate Codec");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const chooseDoctorHandler = (req: Request, res: Response) => {
+  try {
+    const body = req?.body;
+    if (chooseDoctorCodec.decode(body)._tag === "Right") {
+      return chooseDoctor(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {

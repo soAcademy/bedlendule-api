@@ -179,7 +179,10 @@ export const createReviewCodec = strict({
   requestId: t.number,
   score: t.number,
   review: optional(t.string),
-  timeSlotId: t.number
+  timeSlotId: t.number,
 });
 
 export interface ICreateReview extends t.TypeOf<typeof createReviewCodec> {}
+
+export const chooseDoctorCodec = t.type({ requestId: t.number, timeSlotId:t.number });
+export interface IChooseDoctor extends t.TypeOf<typeof chooseDoctorCodec> {}

@@ -22,6 +22,7 @@ import {
   IGetScheduleByDate,
   ICreateReview,
   IDeleteRequest,
+  IChooseDoctor,
 } from "./interface";
 export const prisma = new PrismaClient();
 
@@ -575,4 +576,55 @@ export const createReview = (args: ICreateReview) => {
       },
     },
   });
+};
+
+export const chooseDoctor = async (args: IChooseDoctor) => {
+  try {
+    const timeSlotsToBeDeleted = await prisma.doctorTimeslot.findMany({
+      where: {
+        requestId: args.requestId,
+        id: {
+          not: args.timeSlotId,
+        },
+      },
+    });
+
+    const deletedTimeslots = timeSlotsToBeDeleted.map(async (e) => {
+      await prisma.schedule.update({
+        where: {
+          id: e.scheduleId,
+        },
+        data: {
+          timeslots: {
+            deleteMany: {
+              scheduleId: e.scheduleId,
+            },
+          },
+        },
+      });
+    });
+    const deletedSchedules = await prisma.schedule.deleteMany({
+      where: {
+        id: {
+          in: timeSlotsToBeDeleted.map((e) => e.scheduleId),
+        },
+      },
+    });
+
+    const updatedRequest = await prisma.request.update({
+      where: {
+        id: args.requestId,
+      },
+      data: {
+        status: RequestStatus.CHOSEN,
+      },
+    });
+    return {
+      deletedTimeslots,
+      deletedSchedules,
+      updatedRequest,
+    };
+  } catch (err) {
+    throw new Error("Failed to get request");
+  }
 };

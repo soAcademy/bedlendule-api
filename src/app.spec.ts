@@ -18,6 +18,7 @@ import {
   updateSchedule,
   updateUser,
   deleteRequest,
+  chooseDoctor,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
@@ -293,19 +294,19 @@ import * as t from "io-ts";
 //   });
 // });
 
-describe("acceptRequest", () => {
-  test("should create a new time slot and schedule for selected doctorUUID and connect it with requestId", async () => {
-    const data = {
-      requestId: 82,
-      uuid: "d3d7e1bc-fa8a-48e5-9617-7970d60fb15b",
-      startTime: "2023-03-31 08:30:00.000",
-      finishTime: "2023-03-31 09:00:00.000",
-    };
-    const result = await acceptRequest(data);
-    console.log("result", result);
-    // expect(result.requestId).toBe(data.requestId);
-  });
-});
+// describe("acceptRequest", () => {
+//   test("should create a new time slot and schedule for selected doctorUUID and connect it with requestId", async () => {
+//     const data = {
+//       requestId: 82,
+//       uuid: "d3d7e1bc-fa8a-48e5-9617-7970d60fb15b",
+//       startTime: "2023-03-31 08:30:00.000",
+//       finishTime: "2023-03-31 09:00:00.000",
+//     };
+//     const result = await acceptRequest(data);
+//     console.log("result", result);
+//     // expect(result.requestId).toBe(data.requestId);
+//   });
+// });
 
 // describe("getDoctors", () => {
 //   test("should return all doctors detail", async () => {
@@ -339,3 +340,13 @@ describe("acceptRequest", () => {
 //     expect(result.id).toBe(84)
 //   })
 // })
+
+describe("chooseDoctor", () => {
+  test("should delete all timeslots,schedules except the selected one, update the selected requestID status to CHOSEN", async () => {
+    const result = await chooseDoctor({
+      requestId: 64,
+      timeSlotId: 178,
+    });
+    console.log(" result", result);
+  });
+});

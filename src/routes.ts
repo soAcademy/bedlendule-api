@@ -19,6 +19,7 @@ import {
   getScheduleByDateAndUUIDHandler,
   createReviewHandler,
   deleteRequestHandler,
+  chooseDoctorHandler,
 } from "./handler";
 
 export const AppRoutes = [
@@ -121,5 +122,10 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/createReview",
     action: createReviewHandler,
+  },
+  {
+    method: "post",
+    path: "/bedlendule/chooseDoctor",
+    action: chooseDoctorHandler,
   },
 ];
