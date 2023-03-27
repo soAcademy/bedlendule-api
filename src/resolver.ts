@@ -46,6 +46,15 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
       },
       background: true,
       profilePictureUrl: true,
+      schedules: {
+        select: {
+          timeslots: true,
+          description: true,
+          location: true,
+          meetingType: true,
+          title: true,
+        }
+      }
     },
   });
 };
