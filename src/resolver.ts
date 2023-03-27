@@ -310,7 +310,7 @@ export const getOpeningRequests = () => {
   return prisma.request.findMany({
     where: {
       status: {
-        not: "CHOSEN",
+        not: RequestStatus.CHOSEN,
       },
     },
     include: {
@@ -323,7 +323,7 @@ export const getOpeningRequestsByDate = (args: IGetOpeningRequestsByDate) => {
   return prisma.request.findMany({
     where: {
       status: {
-        not: "CHOSEN",
+        not: RequestStatus.CHOSEN,
       },
       startTime: {
         gte: new Date(args.date),
@@ -350,7 +350,13 @@ export const getRequestsByUUID = (args: IGetRequestByUUID) => {
       patientUUID: args.uuid,
     },
     include: {
-      doctorTimeslot: true,
+      doctorTimeslot: {
+        include:{
+          schedule: {
+
+          }
+        }
+      },
       review: true,
     },
   });
