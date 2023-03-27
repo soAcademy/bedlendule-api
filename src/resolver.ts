@@ -249,42 +249,55 @@ export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
 };
 
 export const updateSchedule = async (args: IUpdateSchedule) => {
-  return prisma.schedule.update({
-    where: {
-      id: args.scheduleId,
-    },
-    data: {
-      title: args.title || undefined,
-      meetingType: args.meetingType || undefined,
-      location: args.location || undefined,
-      timeslots: {
-        create: args.addingTimeSlots?.map((e) => {
-          return {
-            startTime: new Date(e.startTime),
-            finishTime: new Date(e.finishTime),
-            price: e.price,
-          };
-        }),
-        delete: args.removingTimeSlots?.map((e) => {
-          return {
-            id: e,
-          };
-        }),
+  try {
+    const schedule = await prisma.schedule.findFirstOrThrow({
+      where: {
+        id: args.scheduleId,
       },
-    },
-    include: {
-      timeslots: {
-        select: {
-          id: true,
-          requestId: true,
-          scheduleId: true,
-          startTime: true,
-          finishTime: true,
-          price: true,
+    });
+    if (schedule.title !== "Patient Request") {
+      return prisma.schedule.update({
+        where: {
+          id: args.scheduleId,
         },
-      },
-    },
-  });
+        data: {
+          title: args.title || undefined,
+          meetingType: args.meetingType || undefined,
+          location: args.location || undefined,
+          timeslots: {
+            create: args.addingTimeSlots?.map((e) => {
+              return {
+                startTime: new Date(e.startTime),
+                finishTime: new Date(e.finishTime),
+                price: e.price,
+              };
+            }),
+            delete: args.removingTimeSlots?.map((e) => {
+              return {
+                id: e,
+              };
+            }),
+          },
+        },
+        include: {
+          timeslots: {
+            select: {
+              id: true,
+              requestId: true,
+              scheduleId: true,
+              startTime: true,
+              finishTime: true,
+              price: true,
+            },
+          },
+        },
+      });
+    } else {
+      throw new Error("Invalid Request");
+    }
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const deleteSchedule = async (args: IDeleteSchedule) => {
@@ -345,39 +358,6 @@ export const getRequestByRequestId = (args: IGetRequestByRequestId) => {
   });
 };
 
-// export const getRequestsByUUID = (args: IGetRequestByUUID) => {
-//   return prisma.request.findMany({
-//     where: {
-//       patientUUID: args.uuid,
-//     },
-//     include: {
-//       doctorTimeslot: {
-//         include:{
-//           schedule: {
-//             include:{
-//               doctorUUID: true,
-//             }
-//           }
-//         }
-//       },
-//       review: true,
-//     },
-//   });
-// };
-// prisma.request.update({
-//   where: {
-//     id: 1
-//   },
-//   data:{
-//     doctorTimeslot:{
-//       deleteMany: {
-//         id: {
-//           not: chosen
-//         }
-//       }
-//     }
-//   }
-// })
 export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
   try {
     const result = await prisma.request.findMany({
