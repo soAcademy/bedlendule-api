@@ -46,6 +46,13 @@ model Request {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   review         Review?
+  status         RequestStatus?  @default(OPEN)
+}
+
+enum RequestStatus {
+  OPEN
+  ACCEPTED
+  CHOOSEN
 }
 
 enum ProblemTypeEnum {
