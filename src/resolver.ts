@@ -344,24 +344,78 @@ export const getRequestByRequestId = (args: IGetRequestByRequestId) => {
   });
 };
 
-export const getRequestsByUUID = (args: IGetRequestByUUID) => {
-  return prisma.request.findMany({
-    where: {
-      patientUUID: args.uuid,
-    },
-    include: {
-      doctorTimeslot: {
-        include:{
-          schedule: {
-            include:{
-              doctorUUID: true, 
-            }
-          }
-        }
+// export const getRequestsByUUID = (args: IGetRequestByUUID) => {
+//   return prisma.request.findMany({
+//     where: {
+//       patientUUID: args.uuid,
+//     },
+//     include: {
+//       doctorTimeslot: {
+//         include:{
+//           schedule: {
+//             include:{
+//               doctorUUID: true,
+//             }
+//           }
+//         }
+//       },
+//       review: true,
+//     },
+//   });
+// };
+// prisma.request.update({
+//   where: {
+//     id: 1
+//   },
+//   data:{
+//     doctorTimeslot:{
+//       deleteMany: {
+//         id: {
+//           not: chosen
+//         }
+//       }
+//     }
+//   }
+// })
+export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
+  try {
+    const result = await prisma.request.findMany({
+      where: {
+        patientUUID: args.uuid,
       },
-      review: true,
-    },
-  });
+      include: {
+        doctorTimeslot: {
+          include: {
+            schedule: {
+              include: {
+                doctorUUID: {
+                  select:{
+                    uuid: true,
+                    firstName:true,
+                    lastName:true,
+                    background:true,
+                  }
+                }
+              },
+            },
+          },
+        },
+        review: true,
+      },
+    });
+    return result.map(i=>({
+      ...i,
+      doctorTimeslot: i.doctorTimeslot.map(e=>({
+        id: e.id,
+        doctorUUID: e.schedule.doctorUUID.uuid,
+        firstName: e.schedule.doctorUUID.firstName,
+        lastName: e.schedule.doctorUUID.lastName,
+        background: e.schedule.doctorUUID.background
+      }))
+    }))
+  } catch (err) {
+    throw new Error("Failed to get request");
+  }
 };
 
 export const acceptRequest = async (args: IAcceptRequest) => {
@@ -399,31 +453,6 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           price: _request.price,
         },
       });
-      // return prisma.doctorTimeslot.create({
-      //   data: {
-      //     request: {
-      //       connect: {
-      //         id: args.requestId,
-      //       },
-      //     },
-      //     schedule: {
-      //       create: {
-      //         doctorUUID: {
-      //           connect: {
-      //             uuid: args.uuid,
-      //           },
-      //         },
-      //         meetingType: request.meetingType,
-      //         location: request.location,
-      //         description: "Accept Request",
-      //         title: "Patient Request",
-      //       },
-      //     },
-      //     startTime: new Date(args.startTime),
-      //     finishTime: new Date(args.finishTime),
-      //     price: request.price,
-      //   },
-      // });
     } else {
       throw new Error("Invalid request");
     }
