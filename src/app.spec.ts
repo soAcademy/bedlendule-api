@@ -17,6 +17,7 @@ import {
   getUserDetailByUUID,
   updateSchedule,
   updateUser,
+  deleteRequest,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
@@ -330,3 +331,11 @@ describe("bookTimeSlot", () => {
     expect(result.doctorTimeslot?.id).toBe(data.timeslotId);
   });
 });
+
+describe("deleteRequest",()=>{
+  test("should delete selected request id",async ()=>{
+    const result = await deleteRequest({id: 84})
+    console.log(result)
+    expect(result.id).toBe(84)
+  })
+})

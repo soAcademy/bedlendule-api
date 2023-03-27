@@ -6,6 +6,7 @@ import {
   createReviewCodec,
   createScheduleCodec,
   createUserCodec,
+  deleteRequestCodec,
   deleteScheduleCodec,
   getOpeningRequestsByDateCodec,
   getRequestByRequestIdCodec,
@@ -38,6 +39,7 @@ import {
   updateUser,
   getScheduleByDateAndUUID,
   createReview,
+  deleteRequest,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 
@@ -268,6 +270,21 @@ export const createRequestHandler = (req: Request, res: Response) => {
     const body = req?.body;
     if (createRequestCodec.decode(body)._tag === "Right") {
       return createRequest(body)
+        .then((response) => res.status(200).json(response))
+        .catch((err) => res.status(500).send(err));
+    } else {
+      res.status(500).send("Failed To Validate Codec");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const deleteRequestHandler = (req: Request, res: Response) => {
+  try {
+    const body = req?.body;
+    if (deleteRequestCodec.decode(body)._tag === "Right") {
+      return deleteRequest(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {

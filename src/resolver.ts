@@ -16,6 +16,7 @@ import {
   IGetScheduleByDateAndUUID,
   IGetScheduleByDate,
   ICreateReview,
+  IDeleteRequest,
 } from "./interface";
 export const prisma = new PrismaClient();
 
@@ -53,8 +54,8 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
           location: true,
           meetingType: true,
           title: true,
-        }
-      }
+        },
+      },
     },
   });
 };
@@ -403,6 +404,14 @@ export const createRequest = (args: ICreateRequest) => {
           uuid: args.patientUUID,
         },
       },
+    },
+  });
+};
+
+export const deleteRequest = (args: IDeleteRequest) => {
+  return prisma.request.delete({
+    where: {
+      id: args.id,
     },
   });
 };

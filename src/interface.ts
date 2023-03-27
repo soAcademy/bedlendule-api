@@ -157,6 +157,9 @@ export const createRequestCodec = strict({
 });
 export interface ICreateRequest extends t.TypeOf<typeof createRequestCodec> {}
 
+export const deleteRequestCodec = t.type({ id: t.number });
+export interface IDeleteRequest extends t.TypeOf<typeof deleteRequestCodec> {}
+
 export const bookTimeSlotCodec = t.type({
   price: t.number,
   startTime: t.string,
