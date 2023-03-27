@@ -389,13 +389,14 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
             schedule: {
               include: {
                 doctorUUID: {
-                  select:{
+                  select: {
                     uuid: true,
-                    firstName:true,
-                    lastName:true,
-                    background:true,
-                  }
-                }
+                    firstName: true,
+                    lastName: true,
+                    background: true,
+                    reviews: true,
+                  },
+                },
               },
             },
           },
@@ -403,16 +404,19 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
         review: true,
       },
     });
-    return result.map(i=>({
+    return result.map((i) => ({
       ...i,
-      doctorTimeslot: i.doctorTimeslot.map(e=>({
+      doctorTimeslot: i.doctorTimeslot.map((e) => ({
         id: e.id,
         doctorUUID: e.schedule.doctorUUID.uuid,
         firstName: e.schedule.doctorUUID.firstName,
         lastName: e.schedule.doctorUUID.lastName,
-        background: e.schedule.doctorUUID.background
-      }))
-    }))
+        background: e.schedule.doctorUUID.background,
+        reviewScore:
+          e.schedule.doctorUUID.reviews.reduce((acc, r) => acc + r.score, 0) /
+          e.schedule.doctorUUID.reviews.length,
+      })),
+    }));
   } catch (err) {
     throw new Error("Failed to get request");
   }
