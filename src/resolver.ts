@@ -572,10 +572,20 @@ export const createReview = (args: ICreateReview) => {
                         create: {
                           score: args.score,
                           review: args.review,
+                          request: {
+                            connect: {
+                              id: args.requestId,
+                            },
+                          },
                         },
                         update: {
                           score: args.score,
                           review: args.review,
+                          request: {
+                            connect: {
+                              id: args.requestId,
+                            },
+                          },
                         },
                       },
                     },
