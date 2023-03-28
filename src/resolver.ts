@@ -55,7 +55,20 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
       profilePictureUrl: true,
       schedules: {
         select: {
-          timeslots: true,
+          timeslots: {
+            select: {
+              id: true,
+              startTime: true,
+              finishTime: true,
+              price: true,
+              request: {
+                select: {
+                  id: true,
+                  status: true,
+                },
+              },
+            },
+          },
           description: true,
           location: true,
           meetingType: true,
