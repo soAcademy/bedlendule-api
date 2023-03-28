@@ -573,7 +573,10 @@ export const createReview = (args: ICreateReview) => {
                           score: args.score,
                           review: args.review,
                         },
-                        update: {},
+                        update: {
+                          score: args.score,
+                          review: args.review,
+                        },
                       },
                     },
                   },
