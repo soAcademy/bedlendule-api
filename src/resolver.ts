@@ -237,7 +237,7 @@ export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
                   lastName: true,
                 },
               },
-              status: true
+              status: true,
             },
           },
         },
@@ -345,20 +345,20 @@ export const getOpeningRequestsByDate = (args: IGetOpeningRequestsByDate) => {
         lte: new Date(new Date(args.date).getTime() + 86400000),
       },
     },
-    orderBy:{
-      startTime:"asc"
+    orderBy: {
+      startTime: "asc",
     },
-    include:{
-      doctorTimeslot:{
-        select:{
-          schedule:{
-            select:{
-              uuid:true
-            }
-          }
-        }
-      }
-    }
+    include: {
+      doctorTimeslot: {
+        select: {
+          schedule: {
+            select: {
+              uuid: true,
+            },
+          },
+        },
+      },
+    },
   });
 };
 
@@ -371,12 +371,12 @@ export const getRequestByRequestId = (args: IGetRequestByRequestId) => {
       doctorTimeslot: {
         include: {
           schedule: {
-            select:{
-              uuid:true
-            }
-          }
-        }
-      }
+            select: {
+              uuid: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -429,7 +429,12 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
-    if (request.status !== RequestStatus.CHOSEN && request.doctorTimeslot.findIndex(timeslot=>timeslot.schedule.uuid === args.uuid) === -1) {
+    if (
+      request.status !== RequestStatus.CHOSEN &&
+      request.doctorTimeslot.findIndex(
+        (timeslot) => timeslot.schedule.uuid === args.uuid
+      ) === -1
+    ) {
       const _request = await prisma.request.update({
         where: { id: args.requestId },
         data: {
@@ -560,14 +565,15 @@ export const createReview = (args: ICreateReview) => {
                 doctorUUID: {
                   update: {
                     reviews: {
-                      create: {
-                        score: args.score,
-                        review: args.review,
-                        request: {
-                          connect: {
-                            id: args.requestId,
-                          },
+                      upsert: {
+                        where: {
+                          requestId: args.requestId,
                         },
+                        create: {
+                          score: args.score,
+                          review: args.review,
+                        },
+                        update: {},
                       },
                     },
                   },
