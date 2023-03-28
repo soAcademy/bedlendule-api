@@ -347,6 +347,17 @@ export const getOpeningRequestsByDate = (args: IGetOpeningRequestsByDate) => {
     },
     orderBy:{
       startTime:"asc"
+    },
+    include:{
+      doctorTimeslot:{
+        select:{
+          schedule:{
+            select:{
+              uuid:true
+            }
+          }
+        }
+      }
     }
   });
 };
