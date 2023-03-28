@@ -344,6 +344,9 @@ export const getOpeningRequestsByDate = (args: IGetOpeningRequestsByDate) => {
         lte: new Date(new Date(args.date).getTime() + 86400000),
       },
     },
+    orderBy:{
+      startTime:"asc"
+    }
   });
 };
 
