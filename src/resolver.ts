@@ -237,6 +237,7 @@ export const getScheduleByUUID = (args: IGetSCheduleByUUID) => {
                   lastName: true,
                 },
               },
+              status: true
             },
           },
         },
