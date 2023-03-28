@@ -357,7 +357,15 @@ export const getRequestByRequestId = (args: IGetRequestByRequestId) => {
       id: args.requestId,
     },
     include: {
-      doctorTimeslot: true,
+      doctorTimeslot: {
+        include: {
+          schedule: {
+            select:{
+              uuid:true
+            }
+          }
+        }
+      }
     },
   });
 };
@@ -410,7 +418,7 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
-    if (request.status !== RequestStatus.CHOSEN) {
+    if (request.status !== RequestStatus.CHOSEN && request.doctorTimeslot.findIndex(timeslot=>timeslot.schedule.uuid === args.uuid) === -1) {
       const _request = await prisma.request.update({
         where: { id: args.requestId },
         data: {
