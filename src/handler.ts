@@ -20,6 +20,7 @@ import {
   loginCodec,
   updateScheduleCodec,
   updateUserCodec,
+  verifySessionCodec,
 } from "./interface";
 import {
   acceptRequest,
@@ -86,6 +87,7 @@ export const loginHandler = async (req: Request, res: Response) => {
         select: {
           password: true,
           uuid: true,
+          type: true,
         },
       });
       if (userData) {
@@ -93,11 +95,12 @@ export const loginHandler = async (req: Request, res: Response) => {
           hashedPassword: userData.password,
           password: body.password,
           uuid: userData.uuid,
+          type: userData.type,
         })
           .then((response) => res.status(200).json(response))
           .catch((err) => res.status(500).send(err));
       } else {
-        return res.status(401).send("Username or password is incorrect");
+        return res.status(500).send("Username or password is incorrect");
       }
     } else {
       res.status(500).send("Failed To Validate Codec");

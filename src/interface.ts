@@ -56,6 +56,19 @@ export const createScheduleCodec = strict({
 });
 export interface ICreateSchedule extends t.TypeOf<typeof createScheduleCodec> {}
 
+export const loginCodec = t.type({
+  username: t.string,
+  password: t.string,
+});
+export interface ILogin {
+  hashedPassword: string;
+  password: string;
+  uuid: string;
+  type: string;
+}
+
+export const verifySessionCodec = t.string;
+
 export const getScheduleByDateCodec = t.type({
   date: t.string,
 });
@@ -156,16 +169,6 @@ export const createRequestCodec = strict({
   patientUUID: t.string,
 });
 export interface ICreateRequest extends t.TypeOf<typeof createRequestCodec> {}
-
-export const loginCodec = t.type({
-  username: t.string,
-  password: t.string,
-});
-export interface ILogin {
-  hashedPassword: string;
-  password: string;
-  uuid: string;
-}
 
 export const deleteRequestCodec = t.type({ id: t.number });
 export interface IDeleteRequest extends t.TypeOf<typeof deleteRequestCodec> {}

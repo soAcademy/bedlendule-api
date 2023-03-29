@@ -1,3 +1,4 @@
+import { verifySession } from "./auth";
 import {
   acceptRequestHandler,
   bookTimeSlotHandler,
@@ -33,6 +34,11 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/login",
     action: loginHandler,
+  },
+  {
+    method: "post",
+    path: "/bedlendule/verifySession",
+    action: verifySession,
   },
   {
     method: "post",
