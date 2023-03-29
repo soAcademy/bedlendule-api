@@ -13,3 +13,5 @@ export const hash = async (password: string) => {
 export const validateUser = async (password: any, hash: string) => {
   return bcrypt.compare(password, hash).then((res) => res);
 };
+
+// export const getJWT = (second) => { third }

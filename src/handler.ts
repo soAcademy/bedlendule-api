@@ -85,7 +85,11 @@ export const loginHandler = async (req: Request, res: Response) => {
           hashedPassword: idExist.password,
           password: body.password,
         })
-          .then((response) => response ? res.status(200).json(response) : res.status(401).json(response))
+          .then((response) =>
+            response
+              ? res.status(200).json(response)
+              : res.status(401).json(response)
+          )
           .catch((err) => res.status(500).send(err));
       } else {
         return res.json({
