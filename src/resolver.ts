@@ -37,12 +37,11 @@ export const createUser = (args: ICreateUser) => {
 export const login = async (args: ILogin) => {
   const authenticated = await validateUser(args.password, args.hashedPassword);
   if (authenticated) {
-    return { access_token: genJWT(args.uuid) };
+    return { access_token: genJWT(args.uuid), type: args.type };
   } else {
     throw new Error("Password is incorrect");
   }
 };
-
 
 export const getUserDetailByUUID = (args: IGetUserByUUID) => {
   return prisma.user.findFirstOrThrow({
