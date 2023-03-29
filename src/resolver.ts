@@ -342,7 +342,15 @@ export const getOpeningRequests = () => {
       },
     },
     include: {
-      doctorTimeslot: true,
+      doctorTimeslot: {
+        select:{
+          schedule:{
+            select:{
+              uuid:true,
+            }
+          }
+        }
+      }
     },
   });
 };
