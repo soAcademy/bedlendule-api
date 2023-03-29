@@ -164,6 +164,7 @@ export const loginCodec = t.type({
 export interface ILogin {
   hashedPassword: string;
   password: string;
+  uuid: string;
 }
 
 export const deleteRequestCodec = t.type({ id: t.number });

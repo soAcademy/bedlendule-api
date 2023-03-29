@@ -44,12 +44,11 @@ import {
   deleteRequest,
   chooseDoctor,
   login,
+  prisma,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 import { hash } from "./auth";
 import { PrismaClient } from "@prisma/client";
-
-export const prisma = new PrismaClient();
 
 export const createUserHandler = async (req: Request, res: Response) => {
   try {
@@ -72,18 +71,20 @@ export const loginHandler = async (req: Request, res: Response) => {
   try {
     const body = req?.body;
     if (loginCodec.decode(body)._tag === "Right") {
-      const idExist = await prisma.user.findFirst({
+      const userData = await prisma.user.findFirst({
         where: {
           username: body.username,
         },
         select: {
           password: true,
+          uuid: true,
         },
       });
-      if (idExist) {
+      if (userData) {
         return login({
-          hashedPassword: idExist.password,
+          hashedPassword: userData.password,
           password: body.password,
+          uuid: userData.uuid,
         })
           .then((response) => res.status(200).json(response))
           .catch((err) => res.status(500).send(err));
