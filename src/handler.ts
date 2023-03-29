@@ -45,9 +45,11 @@ import {
   chooseDoctor,
   login,
 } from "./resolver";
-import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import { hash } from "./auth";
+import { PrismaClient } from "@prisma/client";
+
+export const prisma = new PrismaClient();
 
 export const createUserHandler = async (req: Request, res: Response) => {
   try {
@@ -70,9 +72,24 @@ export const loginHandler = async (req: Request, res: Response) => {
   try {
     const body = req?.body;
     if (loginCodec.decode(body)._tag === "Right") {
-      return login(body)
-        .then((response) => res.status(200).json(response))
-        .catch((err) => res.status(500).send(err));
+      const idExist = await prisma.user.findFirst({
+        where: {
+          username: body.username,
+        },
+        select: {
+          password: true,
+        },
+      });
+      if (idExist) {
+        return login({
+          hashedPassword: idExist.password,
+          password: body.password,
+        })
+          .then((response) => res.status(200).json(response))
+          .catch((err) => res.status(500).send(err));
+      } else {
+        return res.status(200).send("Username or password is incorrect");
+      }
     } else {
       res.status(500).send("Failed To Validate Codec");
     }
@@ -80,7 +97,6 @@ export const loginHandler = async (req: Request, res: Response) => {
     res.status(500).json(err);
   }
 };
-
 
 export const getUserDetailByUUIDHandler = (req: Request, res: Response) => {
   try {

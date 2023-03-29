@@ -35,18 +35,7 @@ export const createUser = (args: ICreateUser) => {
 };
 
 export const login = async (args: ILogin) => {
-  const hashedPassword: any = await prisma.user.findFirst({
-    where: {
-      username: args.username,
-    },
-    select: {
-      password: true,
-    },
-  });
-  // return hashedPassword.password
-  const authenticated =
-    hashedPassword &&
-    (await validateUser(args.password, hashedPassword.password));
+  const authenticated = await validateUser(args.password, args.hashedPassword);
   return authenticated || false;
 };
 

@@ -161,7 +161,10 @@ export const loginCodec = t.type({
   username: t.string,
   password: t.string,
 });
-export interface ILogin extends t.TypeOf<typeof loginCodec> {}
+export interface ILogin {
+  hashedPassword: string;
+  password: string;
+}
 
 export const deleteRequestCodec = t.type({ id: t.number });
 export interface IDeleteRequest extends t.TypeOf<typeof deleteRequestCodec> {}
