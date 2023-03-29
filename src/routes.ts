@@ -20,6 +20,7 @@ import {
   createReviewHandler,
   deleteRequestHandler,
   chooseDoctorHandler,
+  loginHandler,
 } from "./handler";
 
 export const AppRoutes = [
@@ -27,6 +28,11 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/createUser",
     action: createUserHandler,
+  },
+  {
+    method: "post",
+    path: "/bedlendule/login",
+    action: loginHandler,
   },
   {
     method: "post",

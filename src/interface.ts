@@ -157,6 +157,12 @@ export const createRequestCodec = strict({
 });
 export interface ICreateRequest extends t.TypeOf<typeof createRequestCodec> {}
 
+export const loginCodec = t.type({
+  username: t.string,
+  password: t.string,
+});
+export interface ILogin extends t.TypeOf<typeof loginCodec> {}
+
 export const deleteRequestCodec = t.type({ id: t.number });
 export interface IDeleteRequest extends t.TypeOf<typeof deleteRequestCodec> {}
 
@@ -184,5 +190,8 @@ export const createReviewCodec = strict({
 
 export interface ICreateReview extends t.TypeOf<typeof createReviewCodec> {}
 
-export const chooseDoctorCodec = t.type({ requestId: t.number, timeSlotId:t.number });
+export const chooseDoctorCodec = t.type({
+  requestId: t.number,
+  timeSlotId: t.number,
+});
 export interface IChooseDoctor extends t.TypeOf<typeof chooseDoctorCodec> {}

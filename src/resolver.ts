@@ -23,13 +23,32 @@ import {
   ICreateReview,
   IDeleteRequest,
   IChooseDoctor,
+  ILogin,
 } from "./interface";
+import { validateUser } from "./auth";
 export const prisma = new PrismaClient();
 
 export const createUser = (args: ICreateUser) => {
   return prisma.user.create({
     data: args,
   });
+};
+
+export const login = async (args: ILogin) => {
+  const hashedPassword = await prisma.user.findFirstOrThrow({
+    where: {
+      username: args.username,
+    },
+    select: {
+      password: true,
+    },
+  });
+  // return hashedPassword.password
+  const authenticated = await validateUser(
+    args.password,
+    hashedPassword.password
+  );
+  
 };
 
 export const getUserDetailByUUID = (args: IGetUserByUUID) => {
@@ -343,14 +362,14 @@ export const getOpeningRequests = () => {
     },
     include: {
       doctorTimeslot: {
-        select:{
-          schedule:{
-            select:{
-              uuid:true,
-            }
-          }
-        }
-      }
+        select: {
+          schedule: {
+            select: {
+              uuid: true,
+            },
+          },
+        },
+      },
     },
   });
 };

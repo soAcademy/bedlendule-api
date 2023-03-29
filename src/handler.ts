@@ -17,6 +17,7 @@ import {
   getScheduleByUUIDCodec,
   getScheduleCodec,
   getUserDetailByUUIDCodec,
+  loginCodec,
   updateScheduleCodec,
   updateUserCodec,
 } from "./interface";
@@ -42,15 +43,19 @@ import {
   createReview,
   deleteRequest,
   chooseDoctor,
+  login,
 } from "./resolver";
+import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
+import { hash } from "./auth";
 
-export const createUserHandler = (req: Request, res: Response) => {
+export const createUserHandler = async (req: Request, res: Response) => {
   try {
-    const uuid = uuidv4();
     const body = req?.body;
     if (createUserCodec.decode(body)._tag === "Right") {
-      return createUser({ ...body, uuid })
+      const uuid = uuidv4();
+      const password = await hash(body.password);
+      return createUser({ ...body, uuid, password })
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -60,6 +65,22 @@ export const createUserHandler = (req: Request, res: Response) => {
     res.status(500).json(err);
   }
 };
+
+export const loginHandler = async (req: Request, res: Response) => {
+  try {
+    const body = req?.body;
+    if (loginCodec.decode(body)._tag === "Right") {
+      return login(body)
+        .then((response) => res.status(200).json(response))
+        .catch((err) => res.status(500).send(err));
+    } else {
+      res.status(500).send("Failed To Validate Codec");
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 
 export const getUserDetailByUUIDHandler = (req: Request, res: Response) => {
   try {
