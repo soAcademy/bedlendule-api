@@ -85,10 +85,13 @@ export const loginHandler = async (req: Request, res: Response) => {
           hashedPassword: idExist.password,
           password: body.password,
         })
-          .then((response) => res.status(200).json(response))
+          .then((response) => response ? res.status(200).json(response) : res.status(401).json(response))
           .catch((err) => res.status(500).send(err));
       } else {
-        return res.status(200).send("Username or password is incorrect");
+        return res.json({
+          status: 401,
+          message: "Username or password is incorrect",
+        });
       }
     } else {
       res.status(500).send("Failed To Validate Codec");
