@@ -56,7 +56,15 @@ export const createUserHandler = async (req: Request, res: Response) => {
     if (createUserCodec.decode(body)._tag === "Right") {
       const uuid = uuidv4();
       const password = await hash(body.password);
-      return createUser({ ...body, uuid, password })
+      return createUser({
+        ...body,
+        username: body.username.toLowerCase(),
+        email: body.email.toLowerCase(),
+        firstName: body.firstName.toLowerCase(),
+        lastName: body.lastName.toLowerCase(),
+        uuid,
+        password,
+      })
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
