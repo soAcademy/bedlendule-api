@@ -72,7 +72,7 @@ export const loginHandler = async (req: Request, res: Response) => {
     if (loginCodec.decode(body)._tag === "Right") {
       return login(body)
         .then((response) => res.status(200).json(response))
-        .catch((err) => res.status(500).send(err));
+        .catch((err) => res.status(401).send("Username or password is incorrect"));
     } else {
       res.status(500).send("Failed To Validate Codec");
     }
