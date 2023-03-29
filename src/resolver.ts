@@ -48,7 +48,7 @@ export const login = async (args: ILogin) => {
     args.password,
     hashedPassword.password
   );
-  
+  return authenticated
 };
 
 export const getUserDetailByUUID = (args: IGetUserByUUID) => {
