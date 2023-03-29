@@ -35,7 +35,7 @@ export const createUser = (args: ICreateUser) => {
 };
 
 export const login = async (args: ILogin) => {
-  const hashedPassword = await prisma.user.findFirstOrThrow({
+  const hashedPassword:any = await prisma.user.findFirst({
     where: {
       username: args.username,
     },
@@ -48,7 +48,7 @@ export const login = async (args: ILogin) => {
     args.password,
     hashedPassword.password
   );
-  return authenticated
+  return authenticated;
 };
 
 export const getUserDetailByUUID = (args: IGetUserByUUID) => {
