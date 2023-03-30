@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import { AppRoutes } from "./src";
 import cors from "cors";
 const app = express();
@@ -13,7 +13,12 @@ app.use(
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
     route.path,
-    (req: Request, res: Response) => route.action(req, res)
+    (req: Request, res: Response, next: NextFunction) => {
+      route.middleware && route.middleware(req, res, next);
+      return next()
+    },
+    (req: Request, res: Response, next: NextFunction) =>
+      route.action(req, res, next)
   );
 });
 

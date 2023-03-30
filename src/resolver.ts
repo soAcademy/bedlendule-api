@@ -25,7 +25,7 @@ import {
   IChooseDoctor,
   ILogin,
 } from "./interface";
-import { genJWT, validateUser, verifyJWT } from "./auth";
+import { genJWT, genSignUpJWT, validateUser, verifyJWT } from "./auth";
 export const prisma = new PrismaClient();
 
 export const createUser = (args: ICreateUser) => {
@@ -45,6 +45,12 @@ export const login = async (args: ILogin) => {
   } else {
     throw new Error("Password is incorrect");
   }
+};
+
+export const getPublicToken = async () => {
+  return {
+    access_token: genSignUpJWT(),
+  };
 };
 
 export const getUserDetailByUUID = (args: IGetUserByUUID) => {

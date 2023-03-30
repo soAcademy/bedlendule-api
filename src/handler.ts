@@ -46,6 +46,7 @@ import {
   chooseDoctor,
   login,
   prisma,
+  getPublicToken,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 import { hash } from "./auth";
@@ -71,6 +72,16 @@ export const createUserHandler = async (req: Request, res: Response) => {
     } else {
       res.status(500).send("Failed To Validate Codec");
     }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const getPublicTokenHandler = async (req: Request, res: Response) => {
+  try {
+    return getPublicToken()
+      .then((response) => res.status(200).json(response))
+      .catch((err) => res.status(500).send(err));
   } catch (err) {
     res.status(500).json(err);
   }

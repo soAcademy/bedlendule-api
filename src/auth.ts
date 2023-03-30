@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { verifySessionCodec } from "./interface";
 import { prisma } from "./resolver";
@@ -20,12 +20,24 @@ export const genJWT = (uuid: string) => {
   return token;
 };
 
+export const genSignUpJWT = () => {
+  const token = jwt.sign({ level:"public" }, process.env.JWT_SECRET as jwt.Secret, {
+    algorithm: "HS512",
+    expiresIn: process.env.JWT_SESSION_MINUTE + "m",
+  });
+  return token;
+};
+
 export const verifyJWT = (token: string) => {
   const data = jwt.verify(token, process.env.JWT_SECRET as jwt.Secret);
   console.log("data", data);
 };
 
-export const verifySession = async (req: Request, res: Response) => {
+export const verifySession = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const token = req.headers["access-token"];
     console.log("token", token);
@@ -45,6 +57,7 @@ export const verifySession = async (req: Request, res: Response) => {
           type: true,
         },
       });
+      next()
       return res.status(200).json({
         ...data,
         type: type?.type,
