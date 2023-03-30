@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { verifySessionCodec } from "./interface";
+import { prisma } from "./resolver";
 
 export const hash = async (password: string) => {
   return bcrypt.hash(password, 10).then((hashedPassword) => hashedPassword);
@@ -24,22 +25,33 @@ export const verifyJWT = (token: string) => {
   console.log("data", data);
 };
 
-export const verifySession = (req: Request, res: Response) => {
+export const verifySession = async (req: Request, res: Response) => {
   try {
     const token = req.headers["access-token"];
     console.log("token", token);
     if (!token) {
       return res.status(250).json("no-access-token");
     } else {
-      const data = jwt.verify(
+      const data: any = jwt.verify(
         token as string,
         process.env.JWT_SECRET as jwt.Secret
       );
-      console.log('data', data)
-      return res.status(200).json(data);
+      console.log("data", data);
+      const type = await prisma.user.findFirst({
+        where: {
+          uuid: data?.uuid,
+        },
+        select: {
+          type: true,
+        },
+      });
+      return res.status(200).json({
+        ...data,
+        type: type?.type,
+      });
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(250).json(err);
   }
 };

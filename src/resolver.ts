@@ -440,7 +440,7 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
         review: true,
       },
     });
-    return result.map((i) => ({
+    return result?.map((i) => ({
       ...i,
       doctorTimeslot: i.doctorTimeslot.map((e) => ({
         id: e.id,
