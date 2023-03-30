@@ -191,8 +191,12 @@ export const getScheduleByDateAndUUID = (args: IGetScheduleByDateAndUUID) => {
     select: {
       id: true,
       title: true,
+      location: true,
+      meetingType: true,
+      description: true,
       timeslots: {
         select: {
+          price:true,
           id: true,
           request: {
             select: {
