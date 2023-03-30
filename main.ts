@@ -3,14 +3,19 @@ import { AppRoutes } from "./src";
 import cors from "cors";
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors()
+  //   {
+  //   origin: ["http://localhost:3000"],
+  // }
+);
 
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
     route.path,
     (req: Request, res: Response, next: NextFunction) => {
       route.middleware && route.middleware(req, res, next);
-      return next();
+      return next()
     },
     (req: Request, res: Response, next: NextFunction) =>
       route.action(req, res, next)
