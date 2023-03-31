@@ -40,6 +40,7 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/login",
     action: loginHandler,
+    middleware: verifyToken
   },
   {
     method: "post",
