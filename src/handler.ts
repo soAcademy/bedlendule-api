@@ -219,11 +219,8 @@ export const getScheduleByDateAndUUIDHandler = (
 export const getScheduleByUUIDHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    const token: any = req?.headers["authorization"];
-    const { uuid }: any = verifyJWT(token);
-    const inputData = { ...body, uuid };
-    if (getScheduleByUUIDCodec.decode(inputData)._tag === "Right") {
-      return getScheduleByUUID(inputData)
+    if (getScheduleByUUIDCodec.decode(body)._tag === "Right") {
+      return getScheduleByUUID(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
