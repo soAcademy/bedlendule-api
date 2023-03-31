@@ -16,11 +16,11 @@ AppRoutes.map((route) => {
     (req: Request, res: Response, next: NextFunction) => {
       if (route.middleware) {
         route.middleware(req, res, next);
-        return next();
       }
+      return next();
     },
     (req: Request, res: Response, next: NextFunction) =>
-      route.action(req, res)
+      route.action(req, res, next)
   );
 });
 

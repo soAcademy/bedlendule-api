@@ -37,6 +37,45 @@ export const verifyJWT = (token: string) => {
   console.log("data", data);
 };
 
+export const verifySession = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.headers["authorization"];
+    console.log("token", token);
+    if (!token) {
+      return res.status(250).json("no-access-token");
+    } else {
+      const data: any = jwt.verify(
+        token as string,
+        process.env.JWT_SECRET as jwt.Secret
+      );
+      console.log("data", data);
+      const type = await prisma.user.findFirst({
+        where: {
+          uuid: data?.uuid,
+        },
+        select: {
+          type: true,
+        },
+      });
+
+      return (
+        res.status(200).json({
+          ...data,
+          type: type?.type,
+        }) && next()
+      );
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(250).json(err);
+  }
+  return next();
+};
+
 // export const verifySession = async (
 //   req: Request,
 //   res: Response,
@@ -62,12 +101,7 @@ export const verifyJWT = (token: string) => {
 //         },
 //       });
 
-//       return (
-//         res.status(200).json({
-//           ...data,
-//           type: type?.type,
-//         }) && next()
-//       );
+//       return next()
 //     }
 //   } catch (err) {
 //     console.log(err);
@@ -75,37 +109,3 @@ export const verifyJWT = (token: string) => {
 //   }
 //   return next();
 // };
-
-export const verifySession = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const token = req.headers["authorization"];
-    console.log("token", token);
-    if (!token) {
-      return res.status(250).json("no-access-token");
-    } else {
-      const data: any = jwt.verify(
-        token as string,
-        process.env.JWT_SECRET as jwt.Secret
-      );
-      // console.log("data", data);
-      // const type = await prisma.user.findFirst({
-      //   where: {
-      //     uuid: data?.uuid,
-      //   },
-      //   select: {
-      //     type: true,
-      //   },
-      // });
-
-      return next()
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(250).json(err);
-  }
-  // return next();
-};
