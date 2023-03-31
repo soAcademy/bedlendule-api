@@ -81,7 +81,7 @@ export const verifySession = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {
+  // try {
     const token = req.headers["authorization"];
     console.log("token", token);
     if (!token) {
@@ -103,9 +103,9 @@ export const verifySession = async (
 
       return next()
     }
-  } catch (err) {
-    console.log(err);
-    res.status(250).json(err);
-  }
+  // } catch (err) {
+  //   console.log(err);
+  //   res.status(250).json(err);
+  // }
   return next();
 };
