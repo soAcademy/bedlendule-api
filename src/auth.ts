@@ -37,11 +37,7 @@ export const verifyJWT = (token: string) => {
   console.log("data", data);
 };
 
-export const verifySession = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const verifySession = async (req: Request, res: Response) => {
   try {
     const token = req.headers["authorization"];
     console.log("token", token);
@@ -52,27 +48,46 @@ export const verifySession = async (
         token as string,
         process.env.JWT_SECRET as jwt.Secret
       );
-      // console.log("data", data);
-      // const type = await prisma.user.findFirst({
-      //   where: {
-      //     uuid: data?.uuid,
-      //   },
-      //   select: {
-      //     type: true,
-      //   },
-      // });
+      console.log("data", data);
+      const type = await prisma.user.findFirst({
+        where: {
+          uuid: data?.uuid,
+        },
+        select: {
+          type: true,
+        },
+      });
 
-      // return (
-      //   res.status(200).json({
-      //     ...data,
-      //     type: type?.type,
-      //   }) && next()
-      // );
+      return res.status(200).json({
+        ...data,
+        type: type?.type,
+      });
     }
-    return next()
   } catch (err) {
     console.log(err);
     res.status(250).json(err);
   }
-  // return next();
+};
+
+export const verifyToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.headers["authorization"];
+    console.log("token", token);
+    if (!token) {
+      return res.status(250).json("no-access-token");
+    } else {
+      jwt.verify(
+        token as string,
+        process.env.JWT_SECRET as jwt.Secret
+      );
+    }
+    next();
+  } catch (err) {
+    console.log(err);
+    res.status(250).json(err);
+  }
 };

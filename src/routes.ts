@@ -1,4 +1,4 @@
-import { verifySession } from "./auth";
+import { verifySession, verifyToken } from "./auth";
 import {
   acceptRequestHandler,
   bookTimeSlotHandler,
@@ -50,31 +50,31 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/getUserDetailByUUID",
     action: getUserDetailByUUIDHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/updateUser",
     action: updateUserHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/createSchedule",
     action: createScheduleHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/getAllTimeSlots",
     action: getAllTimeSlotsHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/getScheduleByDate",
     action: getScheduleByDateHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
@@ -90,13 +90,13 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/updateSchedule",
     action: updateScheduleHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/deleteSchedule",
     action: deleteScheduleHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
@@ -112,31 +112,31 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/getRequestByRequestId",
     action: getRequestByRequestIdHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/getRequestsByUUID",
     action: getRequestsByUUIDHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/acceptRequest",
     action: acceptRequestHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/createRequest",
     action: createRequestHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/deleteRequest",
     action: deleteRequestHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
@@ -147,18 +147,18 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/bookTimeSlot",
     action: bookTimeSlotHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/createReview",
     action: createReviewHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
   {
     method: "post",
     path: "/bedlendule/chooseDoctor",
     action: chooseDoctorHandler,
-    middleware: verifySession
+    middleware: verifyToken
   },
 ];
