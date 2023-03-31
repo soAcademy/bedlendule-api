@@ -41,11 +41,11 @@ export const AppRoutes = [
     path: "/bedlendule/login",
     action: loginHandler,
   },
-  {
-    method: "post",
-    path: "/bedlendule/verifySession",
-    action: verifySession,
-  },
+  // {
+  //   method: "post",
+  //   path: "/bedlendule/verifySession",
+  //   action: verifySession,
+  // },
   {
     method: "post",
     path: "/bedlendule/getUserDetailByUUID",
