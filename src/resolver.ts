@@ -380,6 +380,9 @@ export const getOpeningRequests = () => {
         },
       },
     },
+    orderBy: {
+      startTime: "asc"
+    }
   });
 };
 
