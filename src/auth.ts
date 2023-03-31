@@ -42,7 +42,7 @@ export const verifySession = async (req: Request, res: Response) => {
     const token = req.headers["authorization"];
     console.log("token", token);
     if (!token) {
-      return res.status(250).json("no-access-token");
+      return res.status(401).json("no-access-token");
     } else {
       const data: any = jwt.verify(
         token as string,
@@ -65,7 +65,7 @@ export const verifySession = async (req: Request, res: Response) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(250).json(err);
+    res.status(401).json(err);
   }
 };
 
@@ -78,7 +78,7 @@ export const verifyToken = async (
     const token = req.headers["authorization"];
     console.log("token", token);
     if (!token) {
-      return res.status(250).json("no-access-token");
+      return res.status(401).json("no-access-token");
     } else {
       jwt.verify(
         token as string,
@@ -88,6 +88,6 @@ export const verifyToken = async (
     next();
   } catch (err) {
     console.log(err);
-    res.status(250).json(err);
+    res.status(401).json(err);
   }
 };
