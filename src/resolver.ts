@@ -39,6 +39,7 @@ export const login = async (args: ILogin) => {
   if (authenticated) {
     return {
       access_token: genJWT(args.uuid),
+      uuid: args.uuid,
     };
   } else {
     throw new Error("Password is incorrect");
@@ -490,7 +491,7 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
-    console.log(request)
+    console.log(request);
     if (
       request.status !== RequestStatus.CHOSEN &&
       request.doctorTimeslot.findIndex(
@@ -529,7 +530,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
         },
       });
     } else {
-      console.log('invalid')
+      console.log("invalid");
       throw new Error("Invalid request");
     }
   } catch (err) {
