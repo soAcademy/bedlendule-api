@@ -3,12 +3,16 @@ import { AppRoutes } from "./src";
 import cors from "cors";
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*",
-    optionsSuccessStatus: 200,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//     optionsSuccessStatus: 200,
+//   })
+// );
+app.options('*', cors({
+  origin: "*",
+  optionsSuccessStatus: 200,
+}));
 
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
