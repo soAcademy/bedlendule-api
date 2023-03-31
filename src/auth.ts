@@ -39,7 +39,7 @@ export const verifySession = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.headers["access-token"];
+    const token = req.headers["authorization"];
     console.log("token", token);
     if (!token) {
       return res.status(250).json("no-access-token");
