@@ -69,6 +69,29 @@ export const verifySession = async (req: Request, res: Response) => {
   }
 };
 
+export const verifyPublicToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.headers["authorization"];
+    // console.log("token", token);
+    if (!token) {
+      return res.status(401).send("no-access-token");
+    } else {
+      jwt.verify(
+        token as string,
+        process.env.JWT_SECRET as jwt.Secret
+      );
+    }
+    next();
+  } catch (err) {
+    console.log(err);
+    res.status(401).json(err);
+  }
+};
+
 export const verifyToken = async (
   req: Request,
   res: Response,
@@ -78,14 +101,19 @@ export const verifyToken = async (
     const token = req.headers["authorization"];
     // console.log("token", token);
     if (!token) {
-      return res.status(401).json("no-access-token");
+      return res.status(401).send("no-access-token");
     } else {
-      jwt.verify(
+      const result:any = jwt.verify(
         token as string,
         process.env.JWT_SECRET as jwt.Secret
       );
+      if (result.uuid) {
+        next();
+      } else{
+        res.status(401).send("Invalid token")
+      }
     }
-    next();
+    
   } catch (err) {
     console.log(err);
     res.status(401).json(err);
