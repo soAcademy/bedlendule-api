@@ -34,7 +34,7 @@ export const genSignUpJWT = () => {
 
 export const verifyJWT = (token: string) => {
   const data = jwt.verify(token, process.env.JWT_SECRET as jwt.Secret);
-  // console.log("data", data);
+  return data
 };
 
 export const verifySession = async (req: Request, res: Response) => {

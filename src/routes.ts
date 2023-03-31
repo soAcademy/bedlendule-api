@@ -85,6 +85,7 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/getScheduleByUUID",
     action: getScheduleByUUIDHandler,
+    middleware: verifyToken
   },
   {
     method: "post",

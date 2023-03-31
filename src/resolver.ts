@@ -39,8 +39,6 @@ export const login = async (args: ILogin) => {
   if (authenticated) {
     return {
       access_token: genJWT(args.uuid),
-      type: args.type,
-      uuid: args.uuid,
     };
   } else {
     throw new Error("Password is incorrect");
@@ -196,7 +194,7 @@ export const getScheduleByDateAndUUID = (args: IGetScheduleByDateAndUUID) => {
       description: true,
       timeslots: {
         select: {
-          price:true,
+          price: true,
           id: true,
           request: {
             select: {
@@ -292,6 +290,7 @@ export const updateSchedule = async (args: IUpdateSchedule) => {
     const schedule = await prisma.schedule.findFirstOrThrow({
       where: {
         id: args.scheduleId,
+        uuid: args.uuid,
       },
     });
     if (schedule.title !== "Patient Request") {
@@ -340,23 +339,33 @@ export const updateSchedule = async (args: IUpdateSchedule) => {
 };
 
 export const deleteSchedule = async (args: IDeleteSchedule) => {
-  await prisma.schedule.update({
-    where: {
-      id: args.scheduleId,
-    },
-    data: {
-      timeslots: {
-        deleteMany: {
-          scheduleId: args.scheduleId,
+  try {
+    await prisma.schedule.findFirstOrThrow({
+      where: {
+        id: args.scheduleId,
+        uuid: args.uuid,
+      },
+    });
+    await prisma.schedule.update({
+      where: {
+        id: args.scheduleId,
+      },
+      data: {
+        timeslots: {
+          deleteMany: {
+            scheduleId: args.scheduleId,
+          },
         },
       },
-    },
-  });
-  return prisma.schedule.delete({
-    where: {
-      id: args.scheduleId,
-    },
-  });
+    });
+    return prisma.schedule.delete({
+      where: {
+        id: args.scheduleId,
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const getOpeningRequests = () => {
@@ -366,8 +375,8 @@ export const getOpeningRequests = () => {
         not: RequestStatus.CHOSEN,
       },
       startTime: {
-        gte: new Date()
-      }
+        gte: new Date(),
+      },
     },
     include: {
       doctorTimeslot: {
@@ -381,8 +390,8 @@ export const getOpeningRequests = () => {
       },
     },
     orderBy: {
-      startTime: "asc"
-    }
+      startTime: "asc",
+    },
   });
 };
 
@@ -481,6 +490,7 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
+    console.log(request)
     if (
       request.status !== RequestStatus.CHOSEN &&
       request.doctorTimeslot.findIndex(
@@ -519,10 +529,11 @@ export const acceptRequest = async (args: IAcceptRequest) => {
         },
       });
     } else {
+      console.log('invalid')
       throw new Error("Invalid request");
     }
   } catch (err) {
-    throw new Error("Failed to get request");
+    throw new Error("Invalid Request");
   }
 };
 
@@ -539,7 +550,7 @@ export const createRequest = (args: ICreateRequest) => {
       finishTime: new Date(args.finishTime),
       patient: {
         connect: {
-          uuid: args.patientUUID,
+          uuid: args.uuid,
         },
       },
     },
@@ -582,7 +593,7 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
       finishTime: new Date(args.finishTime),
       patient: {
         connect: {
-          uuid: args.patientUUID,
+          uuid: args.uuid,
         },
       },
       doctorTimeslot: {

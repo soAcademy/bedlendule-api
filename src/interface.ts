@@ -2,6 +2,18 @@ import { MeetingTypeEnum, ProblemTypeEnum, UserTypeEnum } from "@prisma/client";
 import * as t from "io-ts";
 import { optional, strict } from "io-ts-extra";
 
+export const loginCodec = t.type({
+  username: t.string,
+  password: t.string,
+});
+export interface ILogin {
+  hashedPassword: string;
+  password: string;
+  uuid: string;
+  type: string;
+}
+
+export const verifySessionCodec = t.string;
 export const createUserCodec = strict({
   type: t.keyof({
     [UserTypeEnum.DOCTOR]: null,
@@ -56,19 +68,6 @@ export const createScheduleCodec = strict({
 });
 export interface ICreateSchedule extends t.TypeOf<typeof createScheduleCodec> {}
 
-export const loginCodec = t.type({
-  username: t.string,
-  password: t.string,
-});
-export interface ILogin {
-  hashedPassword: string;
-  password: string;
-  uuid: string;
-  type: string;
-}
-
-export const verifySessionCodec = t.string;
-
 export const getScheduleByDateCodec = t.type({
   date: t.string,
 });
@@ -90,6 +89,7 @@ export interface IGetSCheduleByUUID
   extends t.TypeOf<typeof getScheduleByUUIDCodec> {}
 
 export const updateScheduleCodec = strict({
+  uuid: t.string,
   scheduleId: t.number,
   addingTimeSlots: optional(
     t.array(
@@ -113,7 +113,10 @@ export const updateScheduleCodec = strict({
 
 export interface IUpdateSchedule extends t.TypeOf<typeof updateScheduleCodec> {}
 
-export const deleteScheduleCodec = t.type({ scheduleId: t.number });
+export const deleteScheduleCodec = t.type({
+  scheduleId: t.number,
+  uuid: t.string,
+});
 export interface IDeleteSchedule extends t.TypeOf<typeof deleteScheduleCodec> {}
 
 export const getOpeningRequestsByDateCodec = t.type({
@@ -166,7 +169,7 @@ export const createRequestCodec = strict({
   location: optional(t.string),
   startTime: t.string,
   finishTime: t.string,
-  patientUUID: t.string,
+  uuid: t.string,
 });
 export interface ICreateRequest extends t.TypeOf<typeof createRequestCodec> {}
 
@@ -177,7 +180,7 @@ export const bookTimeSlotCodec = t.type({
   price: t.number,
   startTime: t.string,
   finishTime: t.string,
-  patientUUID: t.string,
+  uuid: t.string,
   timeslotId: t.number,
   meetingType: t.keyof({
     [MeetingTypeEnum.OFFLINE]: null,

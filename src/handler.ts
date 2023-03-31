@@ -49,7 +49,7 @@ import {
   getPublicToken,
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
-import { hash } from "./auth";
+import { hash, verifyJWT } from "./auth";
 import { PrismaClient } from "@prisma/client";
 
 export const createUserHandler = async (req: Request, res: Response) => {
@@ -123,14 +123,16 @@ export const loginHandler = async (req: Request, res: Response) => {
 
 export const getUserDetailByUUIDHandler = (req: Request, res: Response) => {
   try {
-    const body = req?.body;
-    if (getUserDetailByUUIDCodec.decode(body)._tag === "Right") {
-      return getUserDetailByUUID(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    if (getUserDetailByUUIDCodec.decode({ uuid })._tag === "Right") {
+      return getUserDetailByUUID({ uuid })
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
       res.status(500).send("Failed To Validate Codec");
     }
+    return "";
   } catch (err) {
     res.status(500).json(err);
   }
@@ -139,8 +141,11 @@ export const getUserDetailByUUIDHandler = (req: Request, res: Response) => {
 export const updateUserHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (updateUserCodec.decode(body)._tag === "Right") {
-      return updateUser(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (updateUserCodec.decode(inputData)._tag === "Right") {
+      return updateUser(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -154,8 +159,11 @@ export const updateUserHandler = (req: Request, res: Response) => {
 export const createScheduleHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (createScheduleCodec.decode(body)._tag === "Right") {
-      return createSchedule(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (createScheduleCodec.decode(inputData)._tag === "Right") {
+      return createSchedule(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -212,8 +220,11 @@ export const getScheduleByDateAndUUIDHandler = (
 export const getScheduleByUUIDHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (getScheduleByUUIDCodec.decode(body)._tag === "Right") {
-      return getScheduleByUUID(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (getScheduleByUUIDCodec.decode(inputData)._tag === "Right") {
+      return getScheduleByUUID(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -227,8 +238,11 @@ export const getScheduleByUUIDHandler = (req: Request, res: Response) => {
 export const updateScheduleHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (updateScheduleCodec.decode(body)._tag === "Right") {
-      return updateSchedule(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (updateScheduleCodec.decode(inputData)._tag === "Right") {
+      return updateSchedule(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -242,8 +256,11 @@ export const updateScheduleHandler = (req: Request, res: Response) => {
 export const deleteScheduleHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (deleteScheduleCodec.decode(body)._tag === "Right") {
-      return deleteSchedule(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (deleteScheduleCodec.decode(inputData)._tag === "Right") {
+      return deleteSchedule(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -299,9 +316,11 @@ export const getRequestByRequestIdHandler = (req: Request, res: Response) => {
 
 export const getRequestsByUUIDHandler = (req: Request, res: Response) => {
   try {
-    const body = req?.body;
-    if (getRequestsByUUIDCodec.decode(body)._tag === "Right") {
-      return getRequestsByUUID(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { uuid };
+    if (getRequestsByUUIDCodec.decode(inputData)._tag === "Right") {
+      return getRequestsByUUID(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -315,12 +334,18 @@ export const getRequestsByUUIDHandler = (req: Request, res: Response) => {
 export const acceptRequestHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (acceptRequestCodec.decode(body)._tag === "Right") {
-      return acceptRequest(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (acceptRequestCodec.decode(inputData)._tag === "Right") {
+      return acceptRequest(inputData)
         .then((response) => res.status(200).json(response))
-        .catch((err) => res.status(500).send(err));
+        .catch((err) => {
+          // console.log(err)
+          res.status(400).json("Invalid Request");
+        });
     } else {
-      res.status(500).send("Failed To Validate Codec");
+      res.status(400).send("Failed To Validate Codec");
     }
   } catch (err) {
     res.status(500).json(err);
@@ -330,8 +355,11 @@ export const acceptRequestHandler = (req: Request, res: Response) => {
 export const createRequestHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (createRequestCodec.decode(body)._tag === "Right") {
-      return createRequest(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (createRequestCodec.decode(inputData)._tag === "Right") {
+      return createRequest(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -342,18 +370,25 @@ export const createRequestHandler = (req: Request, res: Response) => {
   }
 };
 
-export const deleteRequestHandler = (req: Request, res: Response) => {
+export const deleteRequestHandler = async (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (deleteRequestCodec.decode(body)._tag === "Right") {
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const request = await getRequestByRequestId({ requestId: body.id });
+
+    if (
+      deleteRequestCodec.decode(body)._tag === "Right" &&
+      request.patientUUID === uuid
+    ) {
       return deleteRequest(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
-      res.status(500).send("Failed To Validate Codec");
+      res.status(400).send("Invalid Request");
     }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).send("Invalid Request");
   }
 };
 
@@ -370,8 +405,11 @@ export const getDoctorsHandler = (req: Request, res: Response) => {
 export const bookTimeSlotHandler = (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (bookTimeSlotCodec.decode(body)._tag === "Right") {
-      return bookTimeSlot(body)
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const inputData = { ...body, uuid };
+    if (bookTimeSlotCodec.decode(inputData)._tag === "Right") {
+      return bookTimeSlot(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
@@ -382,30 +420,42 @@ export const bookTimeSlotHandler = (req: Request, res: Response) => {
   }
 };
 
-export const createReviewHandler = (req: Request, res: Response) => {
+export const createReviewHandler = async (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (createReviewCodec.decode(body)._tag === "Right") {
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const request = await getRequestByRequestId({ requestId: body.requestId });
+    if (
+      createReviewCodec.decode(body)._tag === "Right" &&
+      request.patientUUID === uuid
+    ) {
       return createReview(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
-      res.status(500).send("Failed To Validate Codec");
+      res.status(400).send("Invalid Request");
     }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json("Invalid Request");
   }
 };
 
-export const chooseDoctorHandler = (req: Request, res: Response) => {
+export const chooseDoctorHandler = async (req: Request, res: Response) => {
   try {
     const body = req?.body;
-    if (chooseDoctorCodec.decode(body)._tag === "Right") {
+    const token: any = req?.headers["authorization"];
+    const { uuid }: any = verifyJWT(token);
+    const request = await getRequestByRequestId({ requestId: body.requestId });
+    if (
+      chooseDoctorCodec.decode(body)._tag === "Right" &&
+      request.patientUUID === uuid
+    ) {
       return chooseDoctor(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
-      res.status(500).send("Failed To Validate Codec");
+      res.status(500).send("Invalid Request");
     }
   } catch (err) {
     res.status(500).json(err);
