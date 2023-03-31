@@ -4,10 +4,9 @@ import cors from "cors";
 const app = express();
 app.use(express.json());
 app.use(
-  cors()
-  //   {
-  //   origin: ["http://localhost:3000"],
-  // }
+  cors({
+    origin: true,
+  })
 );
 
 AppRoutes.map((route) => {
@@ -15,7 +14,7 @@ AppRoutes.map((route) => {
     route.path,
     (req: Request, res: Response, next: NextFunction) => {
       route.middleware && route.middleware(req, res, next);
-      return next()
+      return next();
     },
     (req: Request, res: Response, next: NextFunction) =>
       route.action(req, res, next)
