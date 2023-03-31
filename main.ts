@@ -13,10 +13,10 @@ app.use(
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
     route.path,
-    // (req: Request, res: Response, next: NextFunction) => {
-    //   route.middleware && route.middleware(req, res, next);
-    //   return next
-    // },
+    async (req: Request, res: Response, next: NextFunction) => {
+      route.middleware && route.middleware(req, res, next);
+      return next
+    },
     (req: Request, res: Response, next: NextFunction) =>
       route.action(req, res, next)
   );
