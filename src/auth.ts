@@ -69,7 +69,7 @@ export const verifySession = async (
       //   }) && next()
       // );
     }
-    next()
+    return next()
   } catch (err) {
     console.log(err);
     res.status(250).json(err);

@@ -12,7 +12,7 @@ AppRoutes.map((route) => {
       if (route.middleware) {
         route.middleware(req, res, next);
       } else {
-        next();
+        return next();
       }
     },
     (req: Request, res: Response, next: NextFunction) =>
