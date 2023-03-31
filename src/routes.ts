@@ -69,7 +69,6 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/getAllTimeSlots",
     action: getAllTimeSlotsHandler,
-    middleware: verifyToken
   },
   {
     method: "post",
