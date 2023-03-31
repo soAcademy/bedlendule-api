@@ -20,7 +20,7 @@ AppRoutes.map((route) => {
       return next();
     },
     (req: Request, res: Response, next: NextFunction) =>
-      route.action(req, res, next)
+      route.action(req, res)
   );
 });
 
