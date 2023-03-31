@@ -57,7 +57,6 @@ export const verifySession = async (
           type: true,
         },
       });
-      next()
       return res.status(200).json({
         ...data,
         type: type?.type,
@@ -67,4 +66,5 @@ export const verifySession = async (
     console.log(err);
     res.status(250).json(err);
   }
+  return next()
 };
