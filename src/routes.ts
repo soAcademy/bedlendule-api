@@ -74,7 +74,6 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/getScheduleByDate",
     action: getScheduleByDateHandler,
-    middleware: verifyToken
   },
   {
     method: "post",
