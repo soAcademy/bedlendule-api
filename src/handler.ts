@@ -123,10 +123,9 @@ export const loginHandler = async (req: Request, res: Response) => {
 
 export const getUserDetailByUUIDHandler = (req: Request, res: Response) => {
   try {
-    const token: any = req?.headers["authorization"];
-    const { uuid }: any = verifyJWT(token);
-    if (getUserDetailByUUIDCodec.decode({ uuid })._tag === "Right") {
-      return getUserDetailByUUID({ uuid })
+    const body = req?.body;
+    if (getUserDetailByUUIDCodec.decode(body)._tag === "Right") {
+      return getUserDetailByUUID(body)
         .then((response) => res.status(200).json(response))
         .catch((err) => res.status(500).send(err));
     } else {
