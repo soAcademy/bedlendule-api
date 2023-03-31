@@ -34,13 +34,13 @@ export const genSignUpJWT = () => {
 
 export const verifyJWT = (token: string) => {
   const data = jwt.verify(token, process.env.JWT_SECRET as jwt.Secret);
-  console.log("data", data);
+  // console.log("data", data);
 };
 
 export const verifySession = async (req: Request, res: Response) => {
   try {
     const token = req.headers["authorization"];
-    console.log("token", token);
+    // console.log("token", token);
     if (!token) {
       return res.status(401).json("no-access-token");
     } else {
@@ -48,7 +48,7 @@ export const verifySession = async (req: Request, res: Response) => {
         token as string,
         process.env.JWT_SECRET as jwt.Secret
       );
-      console.log("data", data);
+      // console.log("data", data);
       const type = await prisma.user.findFirst({
         where: {
           uuid: data?.uuid,
@@ -76,7 +76,7 @@ export const verifyToken = async (
 ) => {
   try {
     const token = req.headers["authorization"];
-    console.log("token", token);
+    // console.log("token", token);
     if (!token) {
       return res.status(401).json("no-access-token");
     } else {
