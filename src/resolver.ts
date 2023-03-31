@@ -365,6 +365,9 @@ export const getOpeningRequests = () => {
       status: {
         not: RequestStatus.CHOSEN,
       },
+      startTime: {
+        gte: new Date()
+      }
     },
     include: {
       doctorTimeslot: {
