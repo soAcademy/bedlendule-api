@@ -52,26 +52,27 @@ export const verifySession = async (
         token as string,
         process.env.JWT_SECRET as jwt.Secret
       );
-      console.log("data", data);
-      const type = await prisma.user.findFirst({
-        where: {
-          uuid: data?.uuid,
-        },
-        select: {
-          type: true,
-        },
-      });
+      // console.log("data", data);
+      // const type = await prisma.user.findFirst({
+      //   where: {
+      //     uuid: data?.uuid,
+      //   },
+      //   select: {
+      //     type: true,
+      //   },
+      // });
 
-      return (
-        res.status(200).json({
-          ...data,
-          type: type?.type,
-        }) && next()
-      );
+      // return (
+      //   res.status(200).json({
+      //     ...data,
+      //     type: type?.type,
+      //   }) && next()
+      // );
     }
+    next()
   } catch (err) {
     console.log(err);
     res.status(250).json(err);
   }
-  return next();
+  // return next();
 };
