@@ -21,10 +21,14 @@ export const genJWT = (uuid: string) => {
 };
 
 export const genSignUpJWT = () => {
-  const token = jwt.sign({ level:"public" }, process.env.JWT_SECRET as jwt.Secret, {
-    algorithm: "HS512",
-    expiresIn: process.env.JWT_SESSION_MINUTE + "m",
-  });
+  const token = jwt.sign(
+    { level: "public" },
+    process.env.JWT_SECRET as jwt.Secret,
+    {
+      algorithm: "HS512",
+      expiresIn: process.env.JWT_SESSION_MINUTE + "m",
+    }
+  );
   return token;
 };
 
@@ -57,14 +61,17 @@ export const verifySession = async (
           type: true,
         },
       });
-      return res.status(200).json({
-        ...data,
-        type: type?.type,
-      });
+
+      return (
+        res.status(200).json({
+          ...data,
+          type: type?.type,
+        }) && next()
+      );
     }
   } catch (err) {
     console.log(err);
     res.status(250).json(err);
   }
-  return next()
+  return next();
 };
