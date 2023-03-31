@@ -3,11 +3,7 @@ import { AppRoutes } from "./src";
 import cors from "cors";
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: '*',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-}))
+app.use(cors());
 
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
@@ -15,11 +11,12 @@ AppRoutes.map((route) => {
     (req: Request, res: Response, next: NextFunction) => {
       if (route.middleware) {
         route.middleware(req, res, next);
+      } else {
+        next();
       }
-      next();
     },
     (req: Request, res: Response, next: NextFunction) =>
-      route.action(req, res,next)
+      route.action(req, res, next)
   );
 });
 
