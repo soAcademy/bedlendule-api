@@ -154,7 +154,7 @@ export const AppRoutes = [
     method: "post",
     path: "/bedlendule/createReview",
     action: createReviewHandler,
-    // middleware: verifyToken,
+    middleware: verifyToken,
   },
   {
     method: "post",
