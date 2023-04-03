@@ -509,44 +509,44 @@ export const acceptRequest = async (args: IAcceptRequest) => {
         (timeslot) => timeslot.schedule.uuid === args.uuid
       ) === -1
     ) {
-      await prisma.request.update({
+      const _result = await prisma.request.update({
         where: { id: args.requestId },
         data: {
           status: RequestStatus.ACCEPTED,
         },
       });
-      const result = await prisma.doctorTimeslot.create({
-        data: {
-          request: {
-            connect: {
-              id: args.requestId,
-            },
-          },
-          schedule: {
-            create: {
-              doctor: {
-                connect: {
-                  uuid: args.uuid,
-                },
-              },
-              meetingType: request.meetingType,
-              location: request.location,
-              description: "Accept Request",
-              title: "Patient Request",
-            },
-          },
-          doctor: {
-            connect: {
-              uuid: args.uuid,
-            },
-          },
-          startTime: new Date(args.startTime),
-          finishTime: new Date(args.finishTime),
-          price: request.price,
-        },
-      });
+      // const result = await prisma.doctorTimeslot.create({
+      //   data: {
+      //     request: {
+      //       connect: {
+      //         id: args.requestId,
+      //       },
+      //     },
+      //     schedule: {
+      //       create: {
+      //         doctor: {
+      //           connect: {
+      //             uuid: args.uuid,
+      //           },
+      //         },
+      //         meetingType: request.meetingType,
+      //         location: request.location,
+      //         description: "Accept Request",
+      //         title: "Patient Request",
+      //       },
+      //     },
+      //     doctor: {
+      //       connect: {
+      //         uuid: args.uuid,
+      //       },
+      //     },
+      //     startTime: new Date(args.startTime),
+      //     finishTime: new Date(args.finishTime),
+      //     price: request.price,
+      //   },
+      // });
       
-      return result;
+      return _result;
     } else {
       console.log("invalid");
       throw new Error("Invalid request");
