@@ -57,7 +57,7 @@ export const createScheduleCodec = strict({
     [MeetingTypeEnum.OFFLINE]: null,
     [MeetingTypeEnum.ONLINE]: null,
   }),
-  location: optional(t.string),
+  location: t.string,
   timeslots: t.array(
     t.type({
       startTime: t.string,
@@ -149,7 +149,7 @@ export interface IGetRequestByUUID
 
 export const createRequestCodec = strict({
   title: t.string,
-  description: optional(t.string),
+  description: t.string,
   problemType: t.keyof({
     [ProblemTypeEnum.DEPRESSION]: null,
     [ProblemTypeEnum.BIPOLAR]: null,
@@ -166,7 +166,7 @@ export const createRequestCodec = strict({
     [MeetingTypeEnum.OFFLINE]: null,
     [MeetingTypeEnum.ONLINE]: null,
   }),
-  location: optional(t.string),
+  location: t.string,
   startTime: t.string,
   finishTime: t.string,
   uuid: t.string,

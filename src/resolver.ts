@@ -128,6 +128,11 @@ export const createSchedule = (args: ICreateSchedule) => {
             startTime: new Date(e.startTime),
             finishTime: new Date(e.finishTime),
             price: e.price,
+            doctor: {
+              connect: {
+                uuid: args.uuid,
+              },
+            },
           };
         }),
       },
@@ -233,7 +238,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
       },
     },
     select: {
-      doctorUUID: {
+      doctor: {
         select: {
           firstName: true,
           lastName: true,
@@ -309,6 +314,11 @@ export const updateSchedule = async (args: IUpdateSchedule) => {
                 startTime: new Date(e.startTime),
                 finishTime: new Date(e.finishTime),
                 price: e.price,
+                doctor: {
+                  connect: {
+                    uuid: args.uuid,
+                  },
+                },
               };
             }),
             delete: args.removingTimeSlots?.map((e) => {
@@ -454,7 +464,7 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
           include: {
             schedule: {
               include: {
-                doctorUUID: {
+                doctor: {
                   select: {
                     uuid: true,
                     firstName: true,
@@ -474,13 +484,13 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
       ...i,
       doctorTimeslot: i.doctorTimeslot.map((e) => ({
         id: e.id,
-        doctorUUID: e.schedule.doctorUUID.uuid,
-        firstName: e.schedule.doctorUUID.firstName,
-        lastName: e.schedule.doctorUUID.lastName,
-        background: e.schedule.doctorUUID.background,
+        doctorUUID: e.schedule.doctor.uuid,
+        firstName: e.schedule.doctor.firstName,
+        lastName: e.schedule.doctor.lastName,
+        background: e.schedule.doctor.background,
         reviewScore:
-          e.schedule.doctorUUID.reviews.reduce((acc, r) => acc + r.score, 0) /
-          e.schedule.doctorUUID.reviews.length,
+          e.schedule.doctor.reviews.reduce((acc, r) => acc + r.score, 0) /
+          e.schedule.doctor.reviews.length,
       })),
     }));
   } catch (err) {
@@ -513,7 +523,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           },
           schedule: {
             create: {
-              doctorUUID: {
+              doctor: {
                 connect: {
                   uuid: args.uuid,
                 },
@@ -522,6 +532,11 @@ export const acceptRequest = async (args: IAcceptRequest) => {
               location: _request.location,
               description: "Accept Request",
               title: "Patient Request",
+            },
+          },
+          doctor: {
+            connect: {
+              uuid: args.uuid,
             },
           },
           startTime: new Date(args.startTime),
@@ -626,7 +641,7 @@ export const createReview = (args: ICreateReview) => {
           data: {
             schedule: {
               update: {
-                doctorUUID: {
+                doctor: {
                   update: {
                     reviews: {
                       upsert: {
