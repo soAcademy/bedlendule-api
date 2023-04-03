@@ -544,7 +544,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           price: request.price,
         },
       });
-      return "completed";
+      return result;
     } else {
       console.log("invalid");
       throw new Error("Invalid request");
