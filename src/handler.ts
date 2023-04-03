@@ -337,7 +337,7 @@ export const acceptRequestHandler = (req: Request, res: Response) => {
       return acceptRequest(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => {
-          // console.log(err)
+          console.log(err)
           res.status(400).json("Invalid Request");
         });
     } else {
