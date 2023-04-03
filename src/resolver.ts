@@ -115,7 +115,7 @@ export const updateUser = (args: IUpdateUser) => {
 };
 
 export const createSchedule = (args: ICreateSchedule) => {
-  console.log(args)
+  console.log(args);
   return prisma.schedule.create({
     data: {
       uuid: args.uuid,
@@ -502,19 +502,19 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
-    
+
     if (
       request.status !== RequestStatus.CHOSEN &&
       request.doctorTimeslot.findIndex(
         (timeslot) => timeslot.schedule.uuid === args.uuid
       ) === -1
     ) {
-      // const _request = await prisma.request.update({
-      //   where: { id: args.requestId },
-      //   data: {
-      //     status: RequestStatus.ACCEPTED,
-      //   },
-      // });
+      await prisma.request.update({
+        where: { id: args.requestId },
+        data: {
+          status: RequestStatus.ACCEPTED,
+        },
+      });
       const result = await prisma.doctorTimeslot.create({
         data: {
           request: {
@@ -545,7 +545,8 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           price: request.price,
         },
       });
-      return result
+      
+      return result;
     } else {
       console.log("invalid");
       throw new Error("Invalid request");
@@ -622,7 +623,7 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
       problemType: ProblemTypeEnum.OTHER,
       meetingType: args.meetingType,
       location: args.location,
-      status:"CHOSEN"
+      status: "CHOSEN",
     },
     include: {
       doctorTimeslot: true,
