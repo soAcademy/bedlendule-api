@@ -334,7 +334,7 @@ export const acceptRequestHandler = (req: Request, res: Response) => {
     const { uuid }: any = verifyJWT(token);
     const inputData = { ...body, uuid };
     if (acceptRequestCodec.decode(inputData)._tag === "Right") {
-      return "Hello"
+      return res.status(200).send("Hello")
       return acceptRequest(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => {
