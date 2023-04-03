@@ -1,21 +1,22 @@
 model User {
-  id                Int          @id @default(autoincrement())
+  id                Int              @id @default(autoincrement())
   type              UserTypeEnum
-  uuid              String       @unique
-  username          String       @unique
+  uuid              String           @unique
+  username          String           @unique
   password          String
-  email             String       @unique
-  phoneNumber       String       @unique
+  email             String           @unique
+  phoneNumber       String           @unique
   firstName         String
   lastName          String
-  licenseId         String?      @unique
+  licenseId         String?          @unique
   reviews           Review[]
   background        String?
   requests          Request[]
   schedules         Schedule[]
   profilePictureUrl String?
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  timeslots         DoctorTimeslot[]
 }
 
 model Review {
@@ -33,11 +34,11 @@ model Review {
 model Request {
   id             Int              @id @default(autoincrement())
   title          String
-  description    String?
+  description    String
   problemType    ProblemTypeEnum
   price          Float
   meetingType    MeetingTypeEnum
-  location       String?
+  location       String
   startTime      DateTime
   finishTime     DateTime
   patient        User             @relation(fields: [patientUUID], references: [uuid])
@@ -47,6 +48,8 @@ model Request {
   updatedAt      DateTime         @updatedAt
   review         Review?
   status         RequestStatus?   @default(OPEN)
+
+  @@unique([patientUUID, startTime, finishTime])
 }
 
 enum RequestStatus {
@@ -69,12 +72,12 @@ enum ProblemTypeEnum {
 
 model Schedule {
   id          Int              @id @default(autoincrement())
-  doctorUUID  User             @relation(fields: [uuid], references: [uuid])
+  doctor      User             @relation(fields: [uuid], references: [uuid])
   uuid        String
-  title       String?          @default("title")
-  description String?
+  title       String           @default("title")
+  description String
   meetingType MeetingTypeEnum  @default(ONLINE)
-  location    String?
+  location    String
   timeslots   DoctorTimeslot[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
@@ -86,11 +89,15 @@ model DoctorTimeslot {
   requestId  Int?
   schedule   Schedule @relation(fields: [scheduleId], references: [id])
   scheduleId Int
+  doctor     User     @relation(fields: [doctorUUID], references: [uuid])
+  doctorUUID String
   startTime  DateTime
   finishTime DateTime
-  price      Float?
+  price      Float
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@unique([startTime, finishTime, doctorUUID])
 }
 
 enum MeetingTypeEnum {
