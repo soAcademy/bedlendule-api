@@ -502,7 +502,6 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
-
     if (
       request.status !== RequestStatus.CHOSEN &&
       request.doctorTimeslot.findIndex(
@@ -545,7 +544,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           price: request.price,
         },
       });
-      return result;
+      return "completed";
     } else {
       console.log("invalid");
       throw new Error("Invalid request");
