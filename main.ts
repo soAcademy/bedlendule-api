@@ -3,15 +3,11 @@ import { AppRoutes } from "./src";
 import cors from "cors";
 const app = express();
 app.use(express.json());
-const corsOptions = {
-  origin: '*',
-  credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(cors());
 
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
-    route.path,
+    route.path, cors(),
     (req: Request, res: Response, next: NextFunction) => {
       if (route.middleware) {
         route.middleware(req, res, next);
