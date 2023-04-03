@@ -509,15 +509,13 @@ export const acceptRequest = async (args: IAcceptRequest) => {
         (timeslot) => timeslot.schedule.uuid === args.uuid
       ) === -1
     ) {
-      return "Checkeddd"
-      const _request = await prisma.request.update({
-        where: { id: args.requestId },
-        data: {
-          status: RequestStatus.ACCEPTED,
-        },
-      });
-      return _request
-      return prisma.doctorTimeslot.create({
+      // const _request = await prisma.request.update({
+      //   where: { id: args.requestId },
+      //   data: {
+      //     status: RequestStatus.ACCEPTED,
+      //   },
+      // });
+      const result = await prisma.doctorTimeslot.create({
         data: {
           request: {
             connect: {
@@ -531,8 +529,8 @@ export const acceptRequest = async (args: IAcceptRequest) => {
                   uuid: args.uuid,
                 },
               },
-              meetingType: _request.meetingType,
-              location: _request.location,
+              meetingType: request.meetingType,
+              location: request.location,
               description: "Accept Request",
               title: "Patient Request",
             },
@@ -544,9 +542,10 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           },
           startTime: new Date(args.startTime),
           finishTime: new Date(args.finishTime),
-          price: _request.price,
+          price: request.price,
         },
       });
+      return result
     } else {
       console.log("invalid");
       throw new Error("Invalid request");
