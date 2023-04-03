@@ -34,7 +34,7 @@ export const genSignUpJWT = () => {
 
 export const verifyJWT = (token: string) => {
   const data = jwt.verify(token, process.env.JWT_SECRET as jwt.Secret);
-  return data
+  return data;
 };
 
 export const verifySession = async (req: Request, res: Response) => {
@@ -49,6 +49,7 @@ export const verifySession = async (req: Request, res: Response) => {
         process.env.JWT_SECRET as jwt.Secret
       );
       // console.log("data", data);
+      console.log("data")
       const type = await prisma.user.findFirst({
         where: {
           uuid: data?.uuid,
@@ -80,10 +81,7 @@ export const verifyPublicToken = async (
     if (!token) {
       return res.status(401).send("no-access-token");
     } else {
-      jwt.verify(
-        token as string,
-        process.env.JWT_SECRET as jwt.Secret
-      );
+      jwt.verify(token as string, process.env.JWT_SECRET as jwt.Secret);
     }
     next();
   } catch (err) {
@@ -103,17 +101,16 @@ export const verifyToken = async (
     if (!token) {
       return res.status(401).send("no-access-token");
     } else {
-      const result:any = jwt.verify(
+      const result: any = jwt.verify(
         token as string,
         process.env.JWT_SECRET as jwt.Secret
       );
       if (result.uuid) {
         next();
-      } else{
-        res.status(401).send("Invalid token")
+      } else {
+        res.status(401).send("Invalid token");
       }
     }
-    
   } catch (err) {
     console.log(err);
     res.status(401).json(err);
