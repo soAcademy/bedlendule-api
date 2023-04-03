@@ -3,13 +3,8 @@ import { AppRoutes } from "./src";
 import cors from "cors";
 const app = express();
 app.use(express.json());
-app.use(cors({
-  allowedHeaders:['Content-Type', 'Authorization'],
-  origin: "*",
-  credentials:true,
-  preflightContinue:true,
-}));
-
+app.use(cors());
+app.options("*",cors())
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
     route.path,
