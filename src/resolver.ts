@@ -509,6 +509,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
         (timeslot) => timeslot.schedule.uuid === args.uuid
       ) === -1
     ) {
+      return "Checkeddd"
       const _request = await prisma.request.update({
         where: { id: args.requestId },
         data: {
