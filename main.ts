@@ -11,6 +11,7 @@ AppRoutes.map((route) => {
     (req: Request, res: Response, next: NextFunction) => {
       if (route.middleware) {
         route.middleware(req, res, next);
+        res.status(200).send("Checked")
       } else {
         return next();
       }
