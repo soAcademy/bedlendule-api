@@ -17,7 +17,6 @@ AppRoutes.map((route) => {
       }
     },
     (req: Request, res: Response) => {
-      res.status(200).send("working")
       route.action(req, res)}
   );
 });
