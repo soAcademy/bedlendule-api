@@ -3,14 +3,7 @@ import { AppRoutes } from "./src";
 import cors from "cors";
 const app = express();
 app.use(express.json());
-app.use(cors({
-  allowedHeaders:['Content-Type', 'Authorization'],
-  credentials:true,
-  origin:"*",
-  methods:["POST","GET"],
-  optionsSuccessStatus:200,
-  exposedHeaders:['Content-Type', 'Authorization']
-}));
+app.use(cors());
 
 AppRoutes.map((route) => {
   app[route.method as keyof Application](
@@ -18,6 +11,7 @@ AppRoutes.map((route) => {
     (req: Request, res: Response, next: NextFunction) => {
       if (route.middleware) {
         route.middleware(req, res, next);
+        res.status(200).send("Verified")
       } else {
         next();
       }
