@@ -115,6 +115,7 @@ export const updateUser = (args: IUpdateUser) => {
 };
 
 export const createSchedule = (args: ICreateSchedule) => {
+  console.log(args)
   return prisma.schedule.create({
     data: {
       uuid: args.uuid,
@@ -620,6 +621,7 @@ export const bookTimeSlot = (args: IBookTimeSlot) => {
       problemType: ProblemTypeEnum.OTHER,
       meetingType: args.meetingType,
       location: args.location,
+      status:"CHOSEN"
     },
     include: {
       doctorTimeslot: true,
