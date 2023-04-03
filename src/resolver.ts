@@ -502,7 +502,7 @@ export const getRequestsByUUID = async (args: IGetRequestByUUID) => {
 export const acceptRequest = async (args: IAcceptRequest) => {
   try {
     const request = await getRequestByRequestId({ requestId: args.requestId });
-    return request
+    
     if (
       request.status !== RequestStatus.CHOSEN &&
       request.doctorTimeslot.findIndex(
@@ -515,6 +515,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           status: RequestStatus.ACCEPTED,
         },
       });
+      return _request
       return prisma.doctorTimeslot.create({
         data: {
           request: {
