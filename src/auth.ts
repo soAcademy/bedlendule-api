@@ -49,7 +49,6 @@ export const verifySession = async (req: Request, res: Response) => {
         process.env.JWT_SECRET as jwt.Secret
       );
       // console.log("data", data);
-      console.log("data")
       const type = await prisma.user.findFirst({
         where: {
           uuid: data?.uuid,
