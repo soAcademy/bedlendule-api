@@ -509,7 +509,7 @@ export const acceptRequest = async (args: IAcceptRequest) => {
         (timeslot) => timeslot.schedule.uuid === args.uuid
       ) === -1
     ) {
-      const _request = await prisma.request.update({
+      await prisma.request.update({
         where: { id: args.requestId },
         data: {
           status: "ACCEPTED",
@@ -545,7 +545,6 @@ export const acceptRequest = async (args: IAcceptRequest) => {
           price: request.price,
         },
       });
-      
       return result;
     } else {
       console.log("invalid");
