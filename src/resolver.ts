@@ -264,6 +264,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
         select: {
           id: true,
           requestId: true,
+          startTime: true,
         },
       },
     },
