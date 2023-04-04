@@ -28,27 +28,28 @@ app.post(
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    console.log("req?.files", req.file);
-    const file = req.file;
-    const fileExt = file?.originalname.split(".").pop();
-    const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `${fileName}`;
-    const fileBuffer = file.buffer;
-    if (supabase) {
-      const { data, error: uploadError } = await supabase.storage
-        .from("profile-picture")
-        .upload(filePath, fileBuffer);
+    return res.status(200).send("hello")
+    // console.log("req?.files", req.file);
+    // const file = req.file;
+    // const fileExt = file?.originalname.split(".").pop();
+    // const fileName = `${Date.now()}.${fileExt}`;
+    // const filePath = `${fileName}`;
+    // const fileBuffer = file.buffer;
+    // if (supabase) {
+    //   const { data, error: uploadError } = await supabase.storage
+    //     .from("profile-picture")
+    //     .upload(filePath, fileBuffer);
 
-      if (uploadError) {
-        throw uploadError;
-      }
+    //   if (uploadError) {
+    //     throw uploadError;
+    //   }
 
-      const url = await supabase.storage
-        .from("profile-picture")
-        .getPublicUrl(data.path);
-      const imageUrl = url.data.publicUrl;
-      return res.send(imageUrl);
-    }
+    //   const url = await supabase.storage
+    //     .from("profile-picture")
+    //     .getPublicUrl(data.path);
+    //   const imageUrl = url.data.publicUrl;
+    //   return res.send(imageUrl);
+    // }
   }
 );
 
