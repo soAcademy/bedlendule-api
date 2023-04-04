@@ -36,7 +36,7 @@ app.post(
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    console.log("req?.files", req.file.buffer);
+    console.log("req?.files", req.file);
     const file = req.file;
     const fileExt = file?.originalname.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
@@ -52,7 +52,7 @@ app.post(
         throw uploadError;
       }
 
-      const url = await supabase.storage
+      const url = supabase.storage
         .from("profile-picture")
         .getPublicUrl(data.path);
       const imageUrl = url.data.publicUrl;
