@@ -5,8 +5,8 @@ import { createClient } from "@supabase/supabase-js";
 import multer from "multer";
 import { verifyToken } from "./src/auth";
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -35,7 +35,7 @@ app.post(
   (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "*");
-    upload.single("image"), next();
+    upload.single("image");
   },
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
