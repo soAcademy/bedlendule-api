@@ -52,11 +52,11 @@ app.post(
         throw uploadError;
       }
 
-      const url = supabase.storage
+      const url = await supabase.storage
         .from("profile-picture")
         .getPublicUrl(data.path);
       const imageUrl = url.data.publicUrl;
-      console.log("imageUrl", imageUrl)
+      console.log("imageUrl", imageUrl);
       res.send(imageUrl);
     }
   }
