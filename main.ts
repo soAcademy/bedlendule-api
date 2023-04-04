@@ -27,10 +27,9 @@ const upload = multer({ storage });
 // UPLOAD IMAGE END POINT
 app.post(
   "/uploadImg",
-  (req: Request, res: Response, next: NextFunction) => {
-    verifyToken(req, res, next);
-    console.log("Verified")
-  },
+  // (req: Request, res: Response, next: NextFunction) => {
+  //   verifyToken(req, res, next);
+  // },
   upload.single("image"),
   async (req: Request, res: Response) => {
     if (!req.file) {
@@ -42,7 +41,6 @@ app.post(
     const fileName = `${Date.now()}.${fileExt}`;
     const filePath = `${fileName}`;
     const fileBuffer = file.buffer;
-
     if (supabase) {
       const { data, error: uploadError } = await supabase.storage
         .from("profile-picture")

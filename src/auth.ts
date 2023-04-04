@@ -96,7 +96,6 @@ export const verifyToken = async (
 ) => {
   try {
     const token = req.headers["authorization"];
-    // console.log("token", token);
     if (!token) {
       return res.status(401).send("no-access-token");
     } else {
