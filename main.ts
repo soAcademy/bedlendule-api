@@ -32,7 +32,7 @@ app.post(
   },
   (req: Request, res: Response, next: NextFunction) => {
     upload.single("image");
-    return next();
+    next();
   },
   async (req: Request, res: Response) => {
     if (!req.file) {
