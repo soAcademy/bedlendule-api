@@ -9,8 +9,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use((_req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
 
   next();
 });
@@ -30,7 +30,10 @@ app.post(
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
   },
-  upload.single("image"),
+  (req: Request, res: Response, next: NextFunction) => {
+    upload.single("image");
+    return next();
+  },
   async (req: Request, res: Response) => {
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
