@@ -194,7 +194,7 @@ export const getScheduleByDateAndUUID = (args: IGetScheduleByDateAndUUID) => {
             some: {
               startTime: {
                 gte: new Date(args.date) && new Date(),
-                lte: new Date(new Date(args.date).getTime() + 86400000),
+                lt: new Date(new Date(args.date).getTime() + 86400000),
               },
             },
           },
@@ -241,7 +241,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
         some: {
           startTime: {
             gte: new Date(args.date) && new Date(),
-            lte: new Date(new Date(args.date).getTime() + 86400000),
+            lt: new Date(new Date(args.date).getTime() + 86400000),
           },
         },
       },
