@@ -30,10 +30,10 @@ app.post(
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
   },
-  (req: Request, res: Response, next: NextFunction) => {
-    upload.single("image");
-    next();
-  },
+  upload.single("image"),
+  // (req: Request, res: Response, next: NextFunction) => {
+  //   next();
+  // },
   async (req: Request, res: Response) => {
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
