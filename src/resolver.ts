@@ -111,6 +111,13 @@ export const updateUser = (args: IUpdateUser) => {
       background: args.background || undefined,
       profilePictureUrl: args.profilePictureUrl || undefined,
     },
+    select: {
+      email: true,
+      phoneNumber: true,
+      licenseId: true,
+      background: true,
+      profilePictureUrl: true,
+    },
   });
 };
 
