@@ -644,46 +644,46 @@ export const createReview = (args: ICreateReview) => {
     },
     data: {
       doctorTimeslot: {
-        update: {
-          where: {
-            id: args.timeSlotId,
-          },
-          data: {
-            schedule: {
-              update: {
-                doctor: {
-                  update: {
-                    reviews: {
-                      upsert: {
-                        where: {
-                          requestId: args.requestId,
-                        },
-                        create: {
-                          score: args.score,
-                          review: args.review,
-                          request: {
-                            connect: {
-                              id: args.requestId,
-                            },
-                          },
-                        },
-                        update: {
-                          score: args.score,
-                          review: args.review,
-                          request: {
-                            connect: {
-                              id: args.requestId,
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
+        // update: {
+        //   where: {
+        //     id: args.timeSlotId,
+        //   },
+        //   data: {
+        //     schedule: {
+        //       update: {
+        //         doctor: {
+        //           update: {
+        //             reviews: {
+        //               upsert: {
+        //                 where: {
+        //                   requestId: args.requestId,
+        //                 },
+        //                 create: {
+        //                   score: args.score,
+        //                   review: args.review,
+        //                   request: {
+        //                     connect: {
+        //                       id: args.requestId,
+        //                     },
+        //                   },
+        //                 },
+        //                 update: {
+        //                   score: args.score,
+        //                   review: args.review,
+        //                   request: {
+        //                     connect: {
+        //                       id: args.requestId,
+        //                     },
+        //                   },
+        //                 },
+        //               },
+        //             },
+        //           },
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
       },
     },
   });
