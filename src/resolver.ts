@@ -240,7 +240,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
       timeslots: {
         some: {
           startTime: {
-            gte: new Date(args.date),
+            gte: new Date(args.date) && new Date(),
             lte: new Date(new Date(args.date).getTime() + 86400000),
           },
         },
