@@ -27,14 +27,10 @@ const upload = multer({ storage });
 // UPLOAD IMAGE END POINT
 app.post(
   "/uploadImg",
+  upload.single("image"),
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
   },
-  cors(),
-  upload.single("image"),
-  // (req: Request, res: Response, next: NextFunction) => {
-  //   next();
-  // },
   async (req: Request, res: Response) => {
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
