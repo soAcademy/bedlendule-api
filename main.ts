@@ -25,11 +25,11 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // UPLOAD IMAGE END POINT
-app.options('/uploadImg', cors())
 app.post(
   "/uploadImg",
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
+    console.log("Verified")
   },
   upload.single("image"),
   async (req: Request, res: Response) => {
