@@ -16,11 +16,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: true,
-  })
-);
+app.use(cors());
 // UPLOAD IMAGE END POINT
 app.post(
   "/uploadImg",
