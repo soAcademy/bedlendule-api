@@ -50,7 +50,6 @@ import {
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 import { hash, verifyJWT } from "./auth";
-import { PrismaClient } from "@prisma/client";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   try {

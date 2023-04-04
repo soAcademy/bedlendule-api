@@ -8,6 +8,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+
+  next();
+});
+
 const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANONKEY;
 const supabase =
