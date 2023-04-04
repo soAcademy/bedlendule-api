@@ -5,4 +5,5 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL_BEDLENDULE")
+  directUrl = env("DIRECT_URL_BEDLENDULE")
 }
