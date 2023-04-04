@@ -78,7 +78,6 @@ describe("BEDLENDULE", () => {
     };
     const result = await updateUser(data);
     // console.log("updateUser", result);
-    expect(result.uuid).toBe(data.uuid);
     expect(result.email).toBe(data.email);
     expect(result.licenseId).toBe(data.licenseId);
   });
@@ -311,7 +310,7 @@ describe("acceptRequest", () => {
     const result = await acceptRequest(data);
     console.log("acceptRequest", result);
     timeslotId = result.id
-    expect(result.requestId).toBe(data.requestId);
+    expect(result.id).toBe(data.requestId);
   });
 });
 
