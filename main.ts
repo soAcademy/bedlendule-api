@@ -4,13 +4,7 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import multer from "multer";
 import { verifyToken } from "./src/auth";
-const app = express();
-app.use(express.json());
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-  })
-);
+const app: Application = express();
 
 const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANONKEY;
@@ -21,6 +15,12 @@ const supabase =
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+app.use(express.json());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+  })
+);
 // UPLOAD IMAGE END POINT
 app.post(
   "/uploadImg",
