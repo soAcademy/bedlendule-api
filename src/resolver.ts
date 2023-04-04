@@ -71,6 +71,7 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
           score: true,
         },
       },
+      type:true,
       background: true,
       profilePictureUrl: true,
       schedules: {
