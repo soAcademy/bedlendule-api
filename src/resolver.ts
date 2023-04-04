@@ -71,7 +71,7 @@ export const getUserDetailByUUID = (args: IGetUserByUUID) => {
           score: true,
         },
       },
-      type:true,
+      type: true,
       background: true,
       profilePictureUrl: true,
       schedules: {
@@ -253,6 +253,8 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
           lastName: true,
           reviews: true,
           uuid: true,
+          background: true,
+          profilePictureUrl:true,
         },
       },
       id: true,
@@ -699,6 +701,7 @@ export const chooseDoctor = async (args: IChooseDoctor) => {
         },
       },
     });
+    console.log("timeSlotsToBeDeleted", timeSlotsToBeDeleted);
 
     const deletedTimeslots = timeSlotsToBeDeleted.map(async (e) => {
       await prisma.schedule.update({
@@ -714,6 +717,7 @@ export const chooseDoctor = async (args: IChooseDoctor) => {
         },
       });
     });
+    console.log("deletedTimeslots", deletedTimeslots);
     const deletedSchedules = await prisma.schedule.deleteMany({
       where: {
         id: {
@@ -721,7 +725,7 @@ export const chooseDoctor = async (args: IChooseDoctor) => {
         },
       },
     });
-
+    console.log("deletedSchedules", deletedSchedules);
     const updatedRequest = await prisma.request.update({
       where: {
         id: args.requestId,
@@ -730,6 +734,7 @@ export const chooseDoctor = async (args: IChooseDoctor) => {
         status: RequestStatus.CHOSEN,
       },
     });
+    console.log("updatedRequest", updatedRequest);
     return {
       deletedTimeslots,
       deletedSchedules,
