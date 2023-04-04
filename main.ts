@@ -30,6 +30,7 @@ app.post(
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
   },
+  cors(),
   upload.single("image"),
   // (req: Request, res: Response, next: NextFunction) => {
   //   next();
