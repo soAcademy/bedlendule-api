@@ -239,10 +239,19 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
     where: {
       timeslots: {
         some: {
-          startTime: {
-            gte: new Date(args.date) && new Date(),
-            lt: new Date(new Date(args.date).getTime() + 86400000),
-          },
+          AND: [
+            {
+              startTime: {
+                gte: new Date(args.date),
+                lt: new Date(new Date(args.date).getTime() + 86400000),
+              },
+            },
+            {
+              startTime: {
+                gt: new Date(),
+              },
+            },
+          ],
         },
       },
     },
@@ -254,7 +263,7 @@ export const getScheduleByDate = (args: IGetScheduleByDate) => {
           reviews: true,
           uuid: true,
           background: true,
-          profilePictureUrl:true,
+          profilePictureUrl: true,
         },
       },
       id: true,
