@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use((_req, res, next) => {
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
 
@@ -27,8 +27,16 @@ const upload = multer({ storage });
 // UPLOAD IMAGE END POINT
 app.post(
   "/uploadImg",
-  cors(),
-  upload.single("image"),
+  (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    next();
+  },
+  (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    upload.single("image"), next();
+  },
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
   },
@@ -36,7 +44,7 @@ app.post(
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    console.log("req?.files", req.file.buffer);
+    console.log("req?.files", req.file);
     const file = req.file;
     const fileExt = file?.originalname.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
