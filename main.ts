@@ -56,6 +56,7 @@ app.post(
         .from("profile-picture")
         .getPublicUrl(data.path);
       const imageUrl = url.data.publicUrl;
+      console.log("imageUrl", imageUrl)
       res.send(imageUrl);
     }
   }
