@@ -27,6 +27,7 @@ const upload = multer({ storage });
 // UPLOAD IMAGE END POINT
 app.post(
   "/uploadImg",
+  cors(),
   upload.single("image"),
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
