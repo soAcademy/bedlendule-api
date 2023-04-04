@@ -5,10 +5,10 @@ import { createClient } from "@supabase/supabase-js";
 import multer from "multer";
 import { verifyToken } from "./src/auth";
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
 
@@ -25,26 +25,18 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // UPLOAD IMAGE END POINT
+app.options('/uploadImg', cors())
 app.post(
   "/uploadImg",
-  (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
-    next();
-  },
-  (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "*");
-    upload.single("image");
-  },
   (req: Request, res: Response, next: NextFunction) => {
     verifyToken(req, res, next);
   },
+  upload.single("image"),
   async (req: Request, res: Response) => {
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
-    console.log("req?.files", req.file);
+    console.log("req?.files", req.file.buffer);
     const file = req.file;
     const fileExt = file?.originalname.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
