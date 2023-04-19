@@ -112,9 +112,9 @@ export const loginHandler = async (req: Request, res: Response) => {
             loginRateLimiter.resetKey(req.clientIp as string);
             return res.status(200).json(response);
           })
-          .catch((err) => res.status(500).send(err));
+          .catch((err) => res.status(401).send(err));
       } else {
-        return res.status(500).send("Username or password is incorrect");
+        return res.status(401).send("Username or password is incorrect");
       }
     } else {
       res.status(500).send("Failed To Validate Codec");
