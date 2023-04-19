@@ -50,6 +50,7 @@ import {
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 import { hash, verifyJWT } from "./auth";
+import { loginRateLimiter } from "../main";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   try {
@@ -107,7 +108,10 @@ export const loginHandler = async (req: Request, res: Response) => {
           uuid: userData.uuid,
           type: userData.type,
         })
-          .then((response) => res.status(200).json({ ...response, ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress }))
+          .then((response) => {
+            loginRateLimiter.resetKey(req.clientIp as string);
+            return res.status(200).json(response);
+          })
           .catch((err) => res.status(500).send(err));
       } else {
         return res.status(500).send("Username or password is incorrect");
