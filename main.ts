@@ -20,6 +20,7 @@ const loginRateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 miniutes
   max: 5, // Maximum number of requests
   message: "Too many login attempts. Please try again later.", // Response message for exceeding the limit
+  skipSuccessfulRequests: true, // Skip
 });
 
 // LOGIN END POINT WITH RATE LIMITER

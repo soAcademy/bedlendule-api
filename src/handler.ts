@@ -107,7 +107,7 @@ export const loginHandler = async (req: Request, res: Response) => {
           uuid: userData.uuid,
           type: userData.type,
         })
-          .then((response) => res.status(200).json(response))
+          .then((response) => res.status(200).json({ ...response, ip: req.ip }))
           .catch((err) => res.status(500).send(err));
       } else {
         return res.status(500).send("Username or password is incorrect");
@@ -336,7 +336,7 @@ export const acceptRequestHandler = (req: Request, res: Response) => {
       return acceptRequest(inputData)
         .then((response) => res.status(200).json(response))
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           res.status(400).json("Invalid Request");
         });
     } else {
