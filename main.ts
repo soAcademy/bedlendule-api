@@ -1,9 +1,11 @@
 import express, { Application, NextFunction, Request, Response } from "express";
-import { AppRoutes } from "./src";
+import { AppRoutes, loginHandler } from "./src";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import multer from "multer";
-import { verifyToken } from "./src/auth";
+import { verifyPublicToken, verifyToken } from "./src/auth";
+import { rateLimit } from "express-rate-limit";
+
 const app: Application = express();
 
 const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
@@ -11,12 +13,23 @@ const supabaseAnonKey = process.env.SUPABASE_ANONKEY;
 const supabase =
   supabaseUrl && supabaseAnonKey && createClient(supabaseUrl, supabaseAnonKey);
 
+app.use(express.json());
+app.use(cors());
+
+const loginRateLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 miniutes
+  max: 5, // Maximum number of requests
+  message: "Too many login attempts. Please try again later.", // Response message for exceeding the limit
+});
+
+// LOGIN END POINT WITH RATE LIMITER
+app.post("/bedlendule/login", loginRateLimiter, verifyPublicToken, (req, res) =>
+  loginHandler(req, res)
+);
+
 // Set up multer middleware to handle file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
-app.use(express.json());
-app.use(cors());
 // UPLOAD IMAGE END POINT
 app.post(
   "/uploadImg",
@@ -29,7 +42,6 @@ app.post(
       return res.status(400).send("No file uploaded.");
     }
     // return res.status(200).send("hello")
-    console.log("req?.files", req.file);
     const file = req.file;
     const fileExt = file?.originalname.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;

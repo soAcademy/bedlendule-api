@@ -37,12 +37,12 @@ export const AppRoutes = [
     action: createUserHandler,
     middleware: verifyPublicToken,
   },
-  {
-    method: "post",
-    path: "/bedlendule/login",
-    action: loginHandler,
-    middleware: verifyPublicToken,
-  },
+  // {
+  //   method: "post",
+  //   path: "/bedlendule/login",
+  //   action: loginHandler,
+  //   middleware: verifyPublicToken,
+  // },
   {
     method: "post",
     path: "/bedlendule/verifySession",
