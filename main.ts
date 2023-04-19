@@ -4,8 +4,12 @@ import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
 import multer from "multer";
 import { verifyPublicToken, verifyToken } from "./src/auth";
-import { rateLimit } from "express-rate-limit";
 import requestIp from "request-ip";
+import {
+  IRateLimiterRedisOptions,
+  RateLimiterRedis,
+} from "rate-limiter-flexible";
+import Redis from "ioredis";
 
 const app: Application = express();
 
@@ -15,24 +19,70 @@ const supabase =
   supabaseUrl && supabaseAnonKey && createClient(supabaseUrl, supabaseAnonKey);
 
 app.use(express.json());
-app.use(cors({
-  exposedHeaders: ['x-ratelimit-limit','x-ratelimit-remaining','x-ratelimit-reset']
-}));
+app.use(
+  cors({
+    exposedHeaders: [
+      "X-RateLimit-Limit",
+      "X-Ratelimit-Remaining",
+      "X-Ratelimit-Reset",
+      "Retry-After"
+    ],
+  })
+);
 app.use(requestIp.mw());
 
-export const loginRateLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 miniutes
-  max: 5, // Maximum number of requests
-  message: "Too many login attempts. Please try again later.", // Response message for exceeding the limit
-  skipSuccessfulRequests: true, // Skip
-  keyGenerator: (req: any) => {
-    return req.clientIp || req.socket.remoteAddress; // IP address from requestIp.mw(), as opposed to req.ip
-  },
+const redisClient = new Redis({
+  port: 15212,
+  host: "redis-15212.c278.us-east-1-4.ec2.cloud.redislabs.com",
+  password: "i8OvjfPBYqF4aEokH29xGyGhL2n2pxPe",
+  enableOfflineQueue: false,
 });
 
-// LOGIN END POINT WITH RATE LIMITER
-app.post("/bedlendule/login", loginRateLimiter, verifyPublicToken, (req, res) =>
-  loginHandler(req, res)
+const MAX_REQUEST_LIMIT = 5;
+const MAX_REQUEST_WINDOW = 0; // No Expire
+const TOO_MANY_REQUESTS_MESSAGE = "Too many requests";
+
+const opts: IRateLimiterRedisOptions = {
+  storeClient: redisClient,
+  points: MAX_REQUEST_LIMIT, // 5 points
+  duration: MAX_REQUEST_WINDOW, // Per 15 minutes
+  blockDuration: 5 * 60, // block for 5 minutes if more than points consumed
+  inMemoryBlockDuration: 5 * 60,
+  inMemoryBlockOnConsumed: 5,
+};
+export const rateLimiter = new RateLimiterRedis(opts);
+
+export const rateLimiterMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  rateLimiter
+    .consume((req.clientIp as string) || (req.socket.remoteAddress as string))
+    .then((rateLimiterRes) => {
+      console.log(rateLimiterRes);
+      res.setHeader("Retry-After", rateLimiterRes.msBeforeNext / 1000);
+      res.setHeader("X-RateLimit-Limit", MAX_REQUEST_LIMIT);
+      res.setHeader("X-RateLimit-Remaining", rateLimiterRes.remainingPoints);
+      res.setHeader(
+        "X-RateLimit-Reset",
+        new Date(Date.now() + rateLimiterRes.msBeforeNext).toISOString()
+      );
+      next();
+    })
+    .catch((err) => {
+      res.setHeader("Retry-After", err.msBeforeNext / 1000);
+      res.setHeader("X-RateLimit-Remaining", err.remainingPoints);
+      res.status(429).json({ message: TOO_MANY_REQUESTS_MESSAGE });
+      console.log("err", err);
+    });
+};
+
+app.post(
+  "/bedlendule/login",
+  rateLimiterMiddleware,
+  verifyPublicToken,
+  (req, res) => loginHandler(req, res)
 );
 
 // Set up multer middleware to handle file uploads

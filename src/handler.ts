@@ -15,12 +15,10 @@ import {
   getScheduleByDateAndUUIDCodec,
   getScheduleByDateCodec,
   getScheduleByUUIDCodec,
-  getScheduleCodec,
   getUserDetailByUUIDCodec,
   loginCodec,
   updateScheduleCodec,
   updateUserCodec,
-  verifySessionCodec,
 } from "./interface";
 import {
   acceptRequest,
@@ -50,7 +48,7 @@ import {
 } from "./resolver";
 import { v4 as uuidv4 } from "uuid";
 import { hash, verifyJWT } from "./auth";
-import { loginRateLimiter } from "../main";
+import { rateLimiter } from "../main";
 
 export const createUserHandler = async (req: Request, res: Response) => {
   try {
@@ -109,7 +107,8 @@ export const loginHandler = async (req: Request, res: Response) => {
           type: userData.type,
         })
           .then((response) => {
-            loginRateLimiter.resetKey(req.clientIp as string);
+            // loginRateLimiter.resetKey(req.clientIp as string);
+            rateLimiter.delete(req.clientIp as string)
             return res.status(200).json(response);
           })
           .catch((err) => res.status(401).send(err));
