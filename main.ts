@@ -5,6 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import multer from "multer";
 import { verifyPublicToken, verifyToken } from "./src/auth";
 import { rateLimit } from "express-rate-limit";
+import requestIp from "request-ip";
 
 const app: Application = express();
 
@@ -15,12 +16,16 @@ const supabase =
 
 app.use(express.json());
 app.use(cors());
+app.use(requestIp.mw());
 
 const loginRateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 miniutes
   max: 5, // Maximum number of requests
   message: "Too many login attempts. Please try again later.", // Response message for exceeding the limit
   skipSuccessfulRequests: true, // Skip
+  keyGenerator: (req: any) => {
+    return req.clientIp || req.socket.remoteAddress; // IP address from requestIp.mw(), as opposed to req.ip
+  },
 });
 
 // LOGIN END POINT WITH RATE LIMITER
