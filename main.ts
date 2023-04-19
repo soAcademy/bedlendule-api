@@ -10,6 +10,7 @@ import {
   RateLimiterRedis,
 } from "rate-limiter-flexible";
 import Redis from "ioredis";
+import { array } from "fp-ts";
 
 const app: Application = express();
 
@@ -25,16 +26,18 @@ app.use(
       "X-RateLimit-Limit",
       "X-Ratelimit-Remaining",
       "X-Ratelimit-Reset",
-      "Retry-After"
+      "Retry-After",
     ],
   })
 );
 app.use(requestIp.mw());
 
+const redis_url:string = process.env.REDIS_HOST_URL || '127.0.0.1:5555';
+const [host, port] = redis_url.split(":");
 const redisClient = new Redis({
-  port: 15212,
-  host: "redis-15212.c278.us-east-1-4.ec2.cloud.redislabs.com",
-  password: "i8OvjfPBYqF4aEokH29xGyGhL2n2pxPe",
+  port: +port,
+  host: host,
+  password: process.env.REDIS_PASSWORD,
   enableOfflineQueue: false,
 });
 
