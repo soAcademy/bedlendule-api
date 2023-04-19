@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 app.use(requestIp.mw());
 
-const loginRateLimiter = rateLimit({
+export const loginRateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 miniutes
   max: 5, // Maximum number of requests
   message: "Too many login attempts. Please try again later.", // Response message for exceeding the limit
