@@ -15,7 +15,9 @@ const supabase =
   supabaseUrl && supabaseAnonKey && createClient(supabaseUrl, supabaseAnonKey);
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  exposedHeaders: ['x-ratelimit-limit','x-ratelimit-remaining','x-ratelimit-reset']
+}));
 app.use(requestIp.mw());
 
 export const loginRateLimiter = rateLimit({
